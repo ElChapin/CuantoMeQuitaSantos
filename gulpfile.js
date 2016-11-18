@@ -1,3 +1,4 @@
+var os = require('os');
 var gulp = require('gulp');
 var gutil = require('gulp-util');
 var bower = require('bower');
@@ -8,6 +9,7 @@ var rename = require('gulp-rename');
 var sh = require('shelljs');
 var gulp = require('gulp');
 var connect = require('gulp-connect');
+var open = require('gulp-open');
 
 var paths = {
   sass: ['./scss/**/*.scss']
@@ -45,5 +47,10 @@ gulp.task('html', function () {
 gulp.task('watch', function () {
   gulp.watch(['./app/*.html', './app/css/*.css'], ['html']);
 });
+
+gulp.task('open', function(){
+  gulp.src('./app/index.html')
+  .pipe(open());
+});
  
-gulp.task('default', ['connect', 'watch', 'sass', 'sass-watch']);
+gulp.task('default', ['connect', 'watch', 'sass', 'sass-watch', 'open']);
