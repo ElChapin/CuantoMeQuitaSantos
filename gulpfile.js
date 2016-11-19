@@ -35,7 +35,8 @@ gulp.task('sass-watch', function() {
 gulp.task('connect', function() {
   connect.server({
     root: 'app',
-    livereload: true
+    livereload: true,
+    port: 8080
   });
 });
  
@@ -45,12 +46,12 @@ gulp.task('html', function () {
 });
  
 gulp.task('watch', function () {
-  gulp.watch(['./app/*.html', './app/css/*.css'], ['html']);
+  gulp.watch(['./app/**/*.{html,js}', './app/css/**/*.css', './app/img/**/*.{jpg,jpeg,gif,png}'], ['html']);
 });
 
 gulp.task('open', function(){
   gulp.src('./app/index.html')
-  .pipe(open());
+  .pipe(open({uri: 'http://localhost:8080'}));
 });
  
 gulp.task('default', ['connect', 'watch', 'sass', 'sass-watch', 'open']);

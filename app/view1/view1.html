@@ -1,1 +1,17 @@
-<p>This is the partial for view 1.</p>
+<form class="form-horizontal">
+  <div class="form-group">
+    <label for="salario" class="col-sm-2 control-label">Salario</label>
+    <div class="col-sm-10">
+      <input ng-model="salario" type="text" class="form-control" id="salario" placeholder="¿Cuánto ganas al mes?" ui-money-mask="0">
+    </div>
+  </div>
+  <div ng-if="salario >= 13 * salarioMinimo" class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+      <div class="checkbox">
+        <label>
+          <input ng-model="salarioIntegral" type="checkbox"> ¿Es salario integral?
+        </label>
+      </div>
+    </div>
+  </div>
+</form>
