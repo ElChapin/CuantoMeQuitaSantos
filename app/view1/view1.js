@@ -97,11 +97,11 @@ angular.module('myApp.view1', ['ngRoute'])
 
   var calculoSalarioGeneral = function () {
 
-      $scope.actual = calculoSalario(calcularRetencionActual)
-      $scope.reforma = calculoSalario(calcularRetencionReforma)
+      $scope.actual = calculoSalario()
+      $scope.reforma = calculoSalario(true)
   }
 
-  var calculoSalario = function (calcularRetencion) {
+  var calculoSalario = function (conReforma) {
 
     //1: Entradas
     
@@ -233,7 +233,7 @@ angular.module('myApp.view1', ['ngRoute'])
     
     //3.1.5: Cálculo retención
     var baseGravable = subtotal * .75;
-    var retencion = calcularRetencion(baseGravable);
+    var retencion = conReforma ? calcularRetencionReforma(baseGravable) : calcularRetencionActual(baseGravable);
     
     flujoEfectivoMensual -= retencion;    
     
@@ -262,7 +262,13 @@ angular.module('myApp.view1', ['ngRoute'])
         pagosSeguridadSocial: aporteObligatorioSalud +aporteObligatorioPension + aporteFSP,
         retefuente: retencion,
         flujoMensual: flujoEfectivoMensual,
-        flujoAnual: flujoEfectivoAnual
+        flujoAnual: flujoEfectivoAnual,
+        CanastaBasica: conReforma ? 121350 : 117750
     }
+  }
+
+  function calcularIVAMercadoReforma()
+  {
+      return 
   }
 });
