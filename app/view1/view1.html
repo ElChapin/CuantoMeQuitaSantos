@@ -1,17 +1,113 @@
-<form class="form-horizontal">
-  <div class="form-group">
-    <label for="salario" class="col-sm-2 control-label">Salario</label>
-    <div class="col-sm-10">
-      <input ng-model="salario" type="text" class="form-control" id="salario" placeholder="¿Cuánto ganas al mes?" ui-money-mask="0">
-    </div>
-  </div>
-  <div ng-if="salario >= 13 * salarioMinimo" class="form-group">
-    <div class="col-sm-offset-2 col-sm-10">
-      <div class="checkbox">
-        <label>
-          <input ng-model="salarioIntegral" type="checkbox"> ¿Es salario integral?
-        </label>
+<div class="jumbotron">
+  <h2>Lo que me gano <i class="glyphicon glyphicon-log-in"></i></h2>
+  <form class="form-horizontal">
+    <div class="form-group">
+      <label for="salario" class="col-sm-2 control-label">Salario</label>
+      <div class="col-sm-10">
+        <input ng-model="salario" type="text" class="form-control" id="salario" placeholder="¿Cuánto ganas al mes?" ui-money-mask="0">
       </div>
     </div>
-  </div>
-</form>
+    <div ng-if="salario >= 13 * salarioMinimo" class="form-group">
+      <div class="col-sm-offset-2 col-sm-10">
+        <div class="checkbox">
+          <label>
+            <input ng-model="salarioIntegral" type="checkbox"> ¿Es salario integral?
+          </label>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+<h2>Lo que me quitan y lo que me queda</h2>
+<div class="panel panel-default">
+  <!-- Default panel contents -->
+  <div class="panel-heading">Cada mes</div>
+  <table class="table">
+    <thead>
+      <th>Actualmente</th>
+      <th>Con La Reforma</th>
+    </thead>
+    <tbody>
+      <tr>
+        <td>
+          <ul class="list-group">
+            <li class="list-group-item">
+              <span class="badge">{{actual.pagosSeguridadSocial | currency:"$ ":0}}</span>
+              Pagos seguridad social
+            </li>
+            <li class="list-group-item">
+              <span class="badge">{{actual.retefuente | currency:"$ ":0}}</span>
+              Retefuente
+            </li>
+            <li class="list-group-item list-group-item-success">
+              <span class="badge">{{actual.flujoMensual | currency:"$ ":0}}</span>
+              Me quedan
+            </li>
+          </ul>
+        </td>
+        <td>
+          <ul class="list-group">
+            <li class="list-group-item">
+              <span class="badge">{{reforma.pagosSeguridadSocial | currency:"$ ":0}}</span>
+              Pagos seguridad social
+            </li>
+            <li class="list-group-item">
+              <span class="badge">{{reforma.retefuente | currency:"$ ":0}}</span>
+              Retefuente
+            </li>
+            <li class="list-group-item list-group-item-success">
+              <span class="badge">{{reforma.flujoMensual | currency:"$ ":0}}</span>
+              Me quedan
+            </li>
+          </ul>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<div class="panel panel-default">
+  <!-- Default panel contents -->
+  <div class="panel-heading">Cada año</div>
+  <table class="table">
+    <thead>
+      <th>Actualmente</th>
+      <th>Con La Reforma</th>
+    </thead>
+    <tbody>
+      <tr>
+        <td>
+          <ul class="list-group">
+            <li class="list-group-item">
+              <span class="badge">{{actual.pagosSeguridadSocial * 12 | currency:"$ ":0}}</span>
+              Pagos seguridad social
+            </li>
+            <li class="list-group-item">
+              <span class="badge">{{actual.retefuente * 12 | currency:"$ ":0}}</span>
+              Retefuente
+            </li>
+            <li class="list-group-item list-group-item-success">
+              <span class="badge">{{actual.flujoAnual | currency:"$ ":0}}</span>
+              Me quedan
+            </li>
+          </ul>
+        </td>
+        <td>
+          <ul class="list-group">
+            <li class="list-group-item">
+              <span class="badge">{{reforma.pagosSeguridadSocial * 12 | currency:"$ ":0}}</span>
+              Pagos seguridad social
+            </li>
+            <li class="list-group-item">
+              <span class="badge">{{reforma.retefuente * 12 | currency:"$ ":0}}</span>
+              Retefuente
+            </li>
+            <li class="list-group-item list-group-item-success">
+              <span class="badge">{{reforma.flujoAnual | currency:"$ ":0}}</span>
+              Me quedan
+            </li>
+          </ul>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
