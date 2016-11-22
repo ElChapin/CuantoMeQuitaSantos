@@ -95,6 +95,58 @@ angular.module('myApp.view1', ['ngRoute'])
     return retencionUVT * UVT;
   }
 
+    /*
+    Art. 241. Tarifa para las personas naturales y extranjeras residentes y asignaciones y donaciones modales.
+    * -Modificado- El impuesto sobre la renta de las personas naturales residentes en el país, de las sucesiones de causantes residentes en el país, y de los bienes destinados a fines especiales, en virtud de donaciones o asignaciones modales, se determinará de acuerdo con la tabla que contiene el presente artículo:
+    TABLA DEL IMPUESTO SOBRE LA RENTA Y COMPLEMENTARIOS
+
+    RANGOS EN UVT    	    TARIFA MARGINAL 	IMPUESTO
+    DESDE 	    HASTA
+    > 0   	    1.090 	    0% 	                0
+    > 1.090 	1.700 	    19% 	            (Renta gravable o ganancia ocasional gravable expresada en UVT menos 1.090 UVT)*19%
+    > 1.700 	4.100 	    28% 	            (Renta gravable o ganancia ocasional gravable expresada en UVT menos 1.700 UVT)*28% más 116 UVT
+    > 4.100 	En adelante 33% 	            (Renta gravable o ganancia ocasional gravable expresada en UVT menos 4.100 UVT)*33% más 788 UVT
+    */
+    var calcularRentaActual = function (rentaGravable) {
+        var rentaGravableUVT = rentaGravable / UVT;
+        var rentaUVT = 0;
+
+        if (rentaGravableUVT > 4100)
+            rentaUVT = (rentaGravableUVT - 4100) * .33 + 788;
+        else if (rentaGravableUVT > 1700)
+            rentaUVT = (rentaGravableUVT - 1700) * .28 + 116;
+        else if (rentaGravableUVT > 1090)
+            rentaUVT = (rentaGravableUVT - 1090) * .19;
+
+        return rentaUVT * UVT;
+    }
+
+    /*
+    Art. 241. Tarifa para las personas naturales y extranjeras residentes y asignaciones y donaciones modales.
+    * -Modificado- El impuesto sobre la renta de las personas naturales residentes en el país, de las sucesiones de causantes residentes en el país, y de los bienes destinados a fines especiales, en virtud de donaciones o asignaciones modales, se determinará de acuerdo con la tabla que contiene el presente artículo:
+    TABLA DEL IMPUESTO SOBRE LA RENTA Y COMPLEMENTARIOS
+
+    RANGOS EN UVT    	    TARIFA MARGINAL 	IMPUESTO
+    DESDE 	    HASTA
+    > 0   	    ?    	    0% 	                0
+    > ?      	?    	    10% 	            (Renta gravable o ganancia ocasional gravable expresada en UVT menos ? UVT)*10%
+    > ?      	?    	    20% 	            (Renta gravable o ganancia ocasional gravable expresada en UVT menos ? UVT)*20% más ? UVT
+    > ?      	En adelante 35% 	            (Renta gravable o ganancia ocasional gravable expresada en UVT menos ? UVT)*35% más ? UVT
+    */
+    var calcularRentaReforma = function (rentaGravable) {
+        var rentaGravableUVT = rentaGravable / UVT;
+        var rentaUVT = 0;
+
+        if (rentaGravableUVT > 4100)
+            rentaUVT = (rentaGravableUVT - 4100) * .35 + 788;
+        else if (rentaGravableUVT > 1700)
+            rentaUVT = (rentaGravableUVT - 1700) * .20 + 116;
+        else if (rentaGravableUVT > 1090)
+            rentaUVT = (rentaGravableUVT - 1090) * .10;
+
+        return rentaUVT * UVT;
+    }
+
   var calculoSalarioGeneral = function () {
 
       $scope.actual = calculoSalario()
@@ -259,10 +311,13 @@ angular.module('myApp.view1', ['ngRoute'])
     form.find('[name="flujoAnual"]').val(formatValueToCurency(flujoEfectivoAnual));*/
 
     //8. Cálculo de impuesto de renta
+    var rentaGravable = $scope.salario - interesesOCorreccionMonetariaPrestamosVivienda - deduccionPagosSalud - aporteObligatorioSalud - rentasExcentas;
+    var renta = conReforma ? calcularRentaReforma(rentaGravable) : calcularRentaActual(rentaGravable);
 
     return {
         pagosSeguridadSocial: aporteObligatorioSalud +aporteObligatorioPension + aporteFSP,
         retefuente: retencion,
+        renta: renta,
         flujoMensual: flujoEfectivoMensual,
         flujoAnual: flujoEfectivoAnual,
         CanastaBasica: conReforma ? 121350 : 117750
