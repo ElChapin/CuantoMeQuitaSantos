@@ -1,145 +1,141 @@
-<div class="jumbotron">
-  <h2>Lo que me gano <i class="glyphicon glyphicon-log-in"></i></h2>
-  <form class="form-horizontal">
+<br>
+<form class="form-horizontal">
+  <fieldset>
+    <legend>Lo que me gano</legend>
     <div class="form-group">
-      <label for="salario" class="col-sm-2 control-label">Salario</label>
-      <div class="col-sm-10">
-        <input ng-model="salario" type="text" class="form-control" id="salario" placeholder="¿Cuánto ganas al mes?" ui-money-mask="0">
+      <label for="inputEmail" class="col-md-2 control-label">Salario</label>
+      <div class="col-md-10">
+        <input ng-model="salario" ui-money-mask="0" ng-focus="limpiarSalario()" ng-blur="resetSalario()" type="text" class="form-control" id="inputEmail" placeholder="¿Cuánto ganas al mes?">
       </div>
     </div>
-    <div ng-if="salario >= 13 * salarioMinimo" class="form-group">
-      <div class="col-sm-offset-2 col-sm-10">
-        <div class="checkbox">
+    <div class="form-group">
+      <label for="inputPassword" class="col-md-2 control-label">¿Es salario integral?</label>
+      <div class="col-md-10">
+        <div ng-if="salario >= 13 * salarioMinimo" class="togglebutton">
           <label>
-            <input ng-model="salarioIntegral" type="checkbox"> ¿Es salario integral?
+            <input ng-model="salarioIntegral" ng-change="changeSalarioIntegral()" type="checkbox" checked>
           </label>
         </div>
       </div>
     </div>
-  </form>
-</div>
-<h2>Lo que me quitan y lo que me queda</h2>
-<div class="panel panel-default">
-  <!-- Default panel contents -->
-  <div class="panel-heading">Cada mes</div>
-  <table class="table">
-    <thead>
-      <th>Actualmente</th>
-      <th>Con La Reforma</th>
-    </thead>
-    <tbody>
-      <tr>
-        <td>
-          <ul class="list-group">
-            <li class="list-group-item">
-              <span class="badge">{{actual.pagosSeguridadSocial | currency:"$ ":0}}</span>
-              Pagos seguridad social
-            </li>
-            <li class="list-group-item">
-              <span class="badge">{{actual.retefuente | currency:"$ ":0}}</span>
-              Retefuente
-            </li>
-            <li class="list-group-item">
-              <span class="badge">{{actual.renta | currency:"$ ":0}}</span>
-              Impuesto de renta
-            </li>
-            <li class="list-group-item">
-              <span class="badge">{{actual.CanastaBasica | currency:"$ ":0}}</span>
-              IVA Canasta básica
-            </li>
-            <li class="list-group-item list-group-item-success">
-              <span class="badge">{{actual.flujoMensual | currency:"$ ":0}}</span>
-              Me quedan
-            </li>
-          </ul>
-        </td>
-        <td>
-          <ul class="list-group">
-            <li class="list-group-item">
-              <span class="badge">{{reforma.pagosSeguridadSocial | currency:"$ ":0}}</span>
-              Pagos seguridad social
-            </li>
-            <li class="list-group-item">
-              <span class="badge">{{reforma.retefuente | currency:"$ ":0}}</span>
-              Retefuente
-            </li>
-            <li class="list-group-item">
-              <span class="badge">{{reforma.renta | currency:"$ ":0}}</span>
-              Impuesto de renta
-            </li>
-            <li class="list-group-item">
-              <span class="badge">{{reforma.CanastaBasica | currency:"$ ":0}}</span>
-              IVA Canasta básica
-            </li>
-            <li class="list-group-item list-group-item-success">
-              <span class="badge">{{reforma.flujoMensual | currency:"$ ":0}}</span>
-              Me quedan
-            </li>
-          </ul>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</div>
-<div class="panel panel-default">
-  <!-- Default panel contents -->
-  <div class="panel-heading">Cada año</div>
-  <table class="table">
-    <thead>
-      <th>Actualmente</th>
-      <th>Con La Reforma</th>
-    </thead>
-    <tbody>
-      <tr>
-        <td>
-          <ul class="list-group">
-            <li class="list-group-item">
-              <span class="badge">{{actual.pagosSeguridadSocial * 12 | currency:"$ ":0}}</span>
-              Pagos seguridad social
-            </li>
-            <li class="list-group-item">
-              <span class="badge">{{actual.retefuente * 12 | currency:"$ ":0}}</span>
-              Retefuente
-            </li>
-            <li class="list-group-item">
-              <span class="badge">{{actual.renta * 12 | currency:"$ ":0}}</span>
-              Impuesto de renta
-            </li>
-            <li class="list-group-item">
-              <span class="badge">{{actual.CanastaBasica * 12 | currency:"$ ":0}}</span>
-              IVA Canasta básica
-            </li>
-            <li class="list-group-item list-group-item-success">
-              <span class="badge">{{actual.flujoAnual | currency:"$ ":0}}</span>
-              Me quedan
-            </li>
-          </ul>
-        </td>
-        <td>
-          <ul class="list-group">
-            <li class="list-group-item">
-              <span class="badge">{{reforma.pagosSeguridadSocial * 12 | currency:"$ ":0}}</span>
-              Pagos seguridad social
-            </li>
-            <li class="list-group-item">
-              <span class="badge">{{reforma.retefuente * 12 | currency:"$ ":0}}</span>
-              Retefuente
-            </li>
-            <li class="list-group-item">
-              <span class="badge">{{reforma.renta * 12 | currency:"$ ":0}}</span>
-              Impuesto de renta
-            </li>
-            <li class="list-group-item">
-              <span class="badge">{{reforma.CanastaBasica * 12 | currency:"$ ":0}}</span>
-              IVA Canasta básica
-            </li>
-            <li class="list-group-item list-group-item-success">
-              <span class="badge">{{reforma.flujoAnual | currency:"$ ":0}}</span>
-              Me quedan
-            </li>
-          </ul>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</div>
+    <div class="form-group">
+      <label for="inputEmail" class="col-md-2 control-label">Base gravable retefuente</label>
+      <div class="col-md-10">
+        {{baseGravableRetefuente | currency:"$ ":0}}
+      </div>
+    </div>
+  </fieldset>
+</form>
+<fieldset>
+    <legend>Lo que me quitan y lo que me queda</legend>
+</fieldset>
+<uib-tabset active="active">
+  <uib-tab index="0" heading="Cada mes">
+    <div class="row">
+      <div class="col-md-6">
+        <table class="table">
+          <tr>
+            <th colspan="2">Actualmente</th>
+          </tr>
+          <tr class="warning">
+            <td>Pagos seguridad social</td>
+            <td>{{actual.pagosSeguridadSocial | currency:"$ ":0}}</td>
+          </tr>
+          <tr class="danger">
+            <td>Retefuente</td>
+            <td>{{actual.retefuente | currency:"$ ":0}}</td>
+          </tr>
+          <!--<tr>
+            <td>Canasta básica</td>
+            <td>{{actual.CanastaBasica | currency:"$ ":0}}</td>
+          </tr>-->
+          <tr class="success">
+            <td>Me quedan</td>
+            <td>{{actual.flujoMensual | currency:"$ ":0}}</td>
+          </tr>
+        </table>
+      </div>
+      <div class="col-md-6">
+        <table class="table">
+          <tr>
+            <th colspan="2">Con La Reforma</th>
+          </tr>
+          <tr class="warning">
+            <td>Pagos seguridad social</td>
+            <td>{{reforma.pagosSeguridadSocial | currency:"$ ":0}}</td>
+          </tr>
+          <tr class="danger">
+            <td>Retefuente</td>
+            <td>{{reforma.retefuente | currency:"$ ":0}}</td>
+          </tr>
+          <!--<tr>
+            <td>Canasta básica</td>
+            <td>{{reforma.CanastaBasica | currency:"$ ":0}}</td>
+          </tr>-->
+          <tr class="success">
+            <td>Me quedan</td>
+            <td>{{reforma.flujoMensual | currency:"$ ":0}}</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </uib-tab>
+  <uib-tab index="1" heading="Cada año">
+    <div class="row">
+      <div class="col-md-6">
+        <table class="table">
+          <tr>
+            <th colspan="2">Actualmente</th>
+          </tr>
+          <tr class="warning">
+            <td>Pagos seguridad social</td>
+            <td>{{actual.pagosSeguridadSocial * 12 | currency:"$ ":0}}</td>
+          </tr>
+          <tr class="danger">
+            <td>Retefuente</td>
+            <td>{{actual.retefuente * 12 | currency:"$ ":0}}</td>
+          </tr>
+          <tr class="danger">
+            <td>Impuesto de renta</td>
+            <td>{{actual.renta | currency:"$ ":0}}</td>
+          </tr>
+          <!--<tr>
+            <td>Canasta básica</td>
+            <td>{{actual.CanastaBasica | currency:"$ ":0}}</td>
+          </tr>-->
+          <tr class="success">
+            <td>Me quedan</td>
+            <td>{{actual.flujoAnual | currency:"$ ":0}}</td>
+          </tr>
+        </table>
+      </div>
+      <div class="col-md-6">
+        <table class="table">
+          <tr>
+            <th colspan="2">Con La Reforma</th>
+          </tr>
+          <tr class="warning">
+            <td>Pagos seguridad social</td>
+            <td>{{reforma.pagosSeguridadSocial * 12 | currency:"$ ":0}}</td>
+          </tr>
+          <tr class="danger">
+            <td>Retefuente</td>
+            <td>{{reforma.retefuente * 12 | currency:"$ ":0}}</td>
+          </tr>
+          <tr class="danger">
+            <td>Impuesto de renta</td>
+            <td>{{reforma.renta | currency:"$ ":0}}</td>
+          </tr>
+          <!--<tr>
+            <td>Canasta básica</td>
+            <td>{{reforma.CanastaBasica | currency:"$ ":0}}</td>
+          </tr>-->
+          <tr class="success">
+            <td>Me quedan</td>
+            <td>{{reforma.flujoAnual | currency:"$ ":0}}</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </uib-tab>
+</uib-tabset>

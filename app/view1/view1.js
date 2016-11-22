@@ -14,9 +14,34 @@ angular.module('myApp.view1', ['ngRoute'])
   var UVT = 29753;
   $scope.salarioMinimo = 689454;
 
-  $scope.salario = 2500000;
+  var anteriorSalario = 9000000;
+
+  $scope.limpiarSalario = function () {
+
+      $scope.salario = '';
+  }
+
+  $scope.resetSalario = function () {
+    
+    if (!$scope.salario)
+        $scope.salario = anteriorSalario;
+  }
+
+  $scope.resetSalario();
+
+  $scope.salarioIntegral = false;
+
+  $scope.changeSalarioIntegral = function () {
+
+      $scope.salarioIntegral = !$scope.salarioIntegral;
+  }
 
   $scope.$watch('salario', function () {
+    
+    calculoSalarioGeneral()
+  })
+
+  $scope.$watch('salarioIntegral', function () {
     
     calculoSalarioGeneral()
   })
@@ -237,9 +262,13 @@ angular.module('myApp.view1', ['ngRoute'])
     
     //3.1.2: Cálculos ingresos no constitutivo de renta
     var salarioUVT = $scope.salario / UVT;
-    if(salarioUVT < 310) {
+
+    if (salarioUVT < 310) {
+
       var pagosTercerosAlimentacionUVT = ingresoNoConstitutivoRentaPagosTercerosAlimentacion / UVT;
-      if(pagosTercerosAlimentacionUVT > 41) {
+
+      if (pagosTercerosAlimentacionUVT > 41) {
+
         var ingresoNoConstitutivoRentaPagosTercerosAlimentacion_Original = ingresoNoConstitutivoRentaPagosTercerosAlimentacion;
         ingresoNoConstitutivoRentaPagosTercerosAlimentacion = 41 * UVT;
         pagosLaboralesPagosTercerosAlimentacion = ingresoNoConstitutivoRentaPagosTercerosAlimentacion - ingresoNoConstitutivoRentaPagosTercerosAlimentacion;
@@ -258,8 +287,7 @@ angular.module('myApp.view1', ['ngRoute'])
     if (dependientes) {
 
       deduccionDependientes = $scope.salario * .1;
-      var deduccionDependientesUVT = deduccionDependientes / UVT;
-      deduccionDependientes = (deduccionDependientesUVT > 32) ? 32 * UVT : deduccionDependientes;
+      deduccionDependientes = (deduccionDependientes / UVT > 32) ? 32 * UVT : deduccionDependientes;
     }
     
     //3.1.4: Cálculo subtotal
@@ -273,19 +301,33 @@ angular.module('myApp.view1', ['ngRoute'])
     var ingresosNoConstirutivosDeRenta = ingresoNoConstitutivoRentaPagosTercerosAlimentacion + viaticos;
 
     //TODO: Cómo va ahí "Rentas de trabajo exentas numerales del 1 al 9 artículo 206 ET"
-    //TODO: según el procedimeinto debería incluir o no el aporte FSP
-    var rentasExcentas = aporteObligatorioPension + aporteFSP + aporteFVP + aporteAFC;
+    //TODO: según el procedimeinto debería incluir o no el aporte FSP (supuestamente sí)
+    var rentasExcentas = 
+        aporteObligatorioPension + aporteFSP //a. Aportes Obligatorios a Pensiones y fondo solidaridad pensional (Ley 100 1993 Art. 135)		
+        + aporteFVP //b. Aportes Voluntarios Empleador Fondo de Pensiones (Art 126 -1 E.T.)		
+        + aporteAFC //c. Aportes a cuentas AFC (Art 126 - 4 E.T.)
+        + 0 //d. Gastos de Entierro del Trabajador
+        + 0 //e. Gastos de Representación de algunos funcionarios oficiales
+        + 0 //f. Exenciones para miembros de las fuerzas armadas
+        + 0 //g. Indemnizaciones por enfermedad, maternidad o accidente de trabajo		
+        ;
       //TODO: según esto http://www.gerencie.com/disminucion-de-la-base-de-retencion-por-aportes-obligatorios-a-salud-y-pension.html y según el este artículo del estatuto tributario http://www.secretariasenado.gov.co/senado/basedoc/codigo/estatuto_tributario_pr006.html#126-1 debería sumarse a las rentas excentas el aporte a pension que hace el empleador
       //var rentasExcentas = totalAportePension + $scope.aporteFSP + $scope.aporteAFC;
     
     //TODO: dice Aportes obligatorios a salud efectuados por el trabajador (año anterior), pero es así en el procedimeinto 1?
-    var deducciones = aporteObligatorioSalud + interesesOCorreccionMonetariaPrestamosVivienda + deduccionPagosSalud + deduccionDependientes;
+    var deducciones = 
+        aporteObligatorioSalud
+        + (interesesOCorreccionMonetariaPrestamosVivienda / UVT > 100 ? 100 * UVT : interesesOCorreccionMonetariaPrestamosVivienda)
+        + deduccionPagosSalud
+        + deduccionDependientes;
     
     var subtotal = pagosLaborales - ingresosNoConstirutivosDeRenta - rentasExcentas - deducciones;
     
     //3.1.5: Cálculo retención
-    var baseGravable = subtotal * .75;
-    var retencion = conReforma ? calcularRetencionReforma(baseGravable) : calcularRetencionActual(baseGravable);
+    //25% del subtotal 4 Limitadas a 240 uvt (7.140.480 AÑO 2016), Art.206 Numeral 10. El cálculo de esta renta exenta se efectuará una vez se detraiga del valor total de los pagos laborales recibidos por el trabajador, los ingresos no constitutivos de renta, las deducciones y las demás rentas exentas diferentes a la establecida en el presente numeral
+    var rentaExcentaTrabajo = subtotal * .25 / UVT > 240 ? 240 * UVT : subtotal * .25;
+    $scope.baseGravableRetefuente = subtotal - rentaExcentaTrabajo;
+    var retencion = conReforma ? calcularRetencionReforma($scope.baseGravableRetefuente) : calcularRetencionActual($scope.baseGravableRetefuente);
     
     flujoEfectivoMensual -= retencion;    
     
@@ -295,7 +337,7 @@ angular.module('myApp.view1', ['ngRoute'])
     
     //6. Cesantía
     //=Un salario y 12% de intereses sobre la cesantía
-    var cesantia = ($scope.salarioIntegral) ? 0 : $scope.salario;
+    var cesantias = ($scope.salarioIntegral) ? 0 : $scope.salario;
     
     //7. Mostrar salidas
     /*form.find('[name="IBC"]').val(formatValueToCurency(IBC));
@@ -303,10 +345,10 @@ angular.module('myApp.view1', ['ngRoute'])
     form.find('[name="aportePension"]').val(formatValueToCurency(aporteObligatorioPension));
     form.find('[name="aporteFSP"]').val(formatValueToCurency(aporteFSP));
     form.find('[name="seguridadSocial"]').val(formatValueToCurency(aporteObligatorioSalud +aporteObligatorioPension + aporteFSP));
-    form.find('[name="baseGravable"]').val(formatValueToCurency(baseGravable));
+    form.find('[name="baseGravable"]').val(formatValueToCurency($scope.baseGravableRetefuente));
     form.find('[name="retencion"]').val(formatValueToCurency(retencion));
     form.find('[name="aporteTotalPension"]').val(formatValueToCurency(totalAportePension));
-    form.find('[name="ahorroAnual"]').val(formatValueToCurency(cesantia + aporteAFC * 12));
+    form.find('[name="ahorroAnual"]').val(formatValueToCurency(cesantias + aporteAFC * 12));
     form.find('[name="flujoMensual"]').val(formatValueToCurency(flujoEfectivoMensual));
     form.find('[name="flujoAnual"]').val(formatValueToCurency(flujoEfectivoAnual));*/
 
