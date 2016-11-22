@@ -258,6 +258,8 @@ angular.module('myApp.view1', ['ngRoute'])
     form.find('[name="flujoMensual"]').val(formatValueToCurency(flujoEfectivoMensual));
     form.find('[name="flujoAnual"]').val(formatValueToCurency(flujoEfectivoAnual));*/
 
+    //8. Cálculo de impuesto de renta
+
     return {
         pagosSeguridadSocial: aporteObligatorioSalud +aporteObligatorioPension + aporteFSP,
         retefuente: retencion,
