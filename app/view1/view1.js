@@ -14,7 +14,7 @@ angular.module('myApp.view1', ['ngRoute'])
   var UVT = 29753;
   $scope.salarioMinimo = 689454;
 
-  var anteriorSalario = 9000000;
+  var anteriorSalario = 2500000;
 
   $scope.limpiarSalario = function () {
 

@@ -1,25 +1,25 @@
 <br>
 <form class="form-horizontal">
   <fieldset>
-    <legend>Lo que me gano</legend>
+    <legend>¡Vamos a jugar! ¿Cuánto me gano?</legend>
     <div class="form-group">
-      <label for="inputEmail" class="col-md-2 control-label">Salario</label>
+      <label for="inputSalario" class="col-md-2 control-label">Salario</label>
       <div class="col-md-10">
-        <input ng-model="salario" ui-money-mask="0" ng-focus="limpiarSalario()" ng-blur="resetSalario()" type="text" class="form-control" id="inputEmail" placeholder="¿Cuánto ganas al mes?">
+        <input ng-model="salario" ui-money-mask="0" ng-focus="limpiarSalario()" ng-blur="resetSalario()" type="text" class="form-control" id="inputSalario" placeholder="¿Cuánto ganas al mes?">
       </div>
     </div>
-    <div class="form-group">
-      <label for="inputPassword" class="col-md-2 control-label">¿Es salario integral?</label>
+    <div class="form-group" ng-if="salario >= 13 * salarioMinimo">
+      <label for="inputSalarioIntegral" class="col-md-2 control-label">¿Es salario integral?</label>
       <div class="col-md-10">
-        <div ng-if="salario >= 13 * salarioMinimo" class="togglebutton">
+        <div class="togglebutton">
           <label>
-            <input ng-model="salarioIntegral" ng-change="changeSalarioIntegral()" type="checkbox" checked>
+            <input ng-model="salarioIntegral" ng-change="changeSalarioIntegral()" type="checkbox" id="inputSalarioIntegral">
           </label>
         </div>
       </div>
     </div>
     <div class="form-group">
-      <label for="inputEmail" class="col-md-2 control-label">Base gravable retefuente</label>
+      <label class="col-md-2 control-label">Base gravable retefuente</label>
       <div class="col-md-10">
         {{baseGravableRetefuente | currency:"$ ":0}}
       </div>
@@ -97,7 +97,8 @@
           </tr>
           <tr class="danger">
             <td>Impuesto de renta</td>
-            <td>{{actual.renta | currency:"$ ":0}}</td>
+            <!--<td>{{actual.renta | currency:"$ ":0}}</td>-->
+            <td>En construcción...</td>
           </tr>
           <!--<tr>
             <td>Canasta básica</td>
@@ -124,7 +125,8 @@
           </tr>
           <tr class="danger">
             <td>Impuesto de renta</td>
-            <td>{{reforma.renta | currency:"$ ":0}}</td>
+            <!--<td>{{reforma.renta | currency:"$ ":0}}</td>-->
+            <td>En construcción...</td>
           </tr>
           <!--<tr>
             <td>Canasta básica</td>
