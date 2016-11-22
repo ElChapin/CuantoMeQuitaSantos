@@ -40,13 +40,13 @@ gulp.task('connect', function() {
   });
 });
  
-gulp.task('html', function () {
-  gulp.src('./app/*.html')
+gulp.task('assets', function () {
+  gulp.src(['./app/**/*.{html,js}', './app/css/**/*.css', './app/img/**/*.{jpg,jpeg,gif,png}'])
     .pipe(connect.reload());
 });
  
 gulp.task('watch', function () {
-  gulp.watch(['./app/**/*.{html,js}', './app/css/**/*.css', './app/img/**/*.{jpg,jpeg,gif,png}'], ['html']);
+  gulp.watch(['./app/**/*.{html,js}', './app/css/**/*.css', './app/img/**/*.{jpg,jpeg,gif,png}'], ['assets']);
 });
 
 gulp.task('open', function(){
