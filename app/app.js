@@ -5,12 +5,12 @@ angular.module('myApp', [
   'ngRoute',
   'ui.utils.masks',
   'ui.bootstrap',
-  'myApp.view1',
+  'myApp.paso1',
   'myApp.view2',
   'myApp.version'
 ]).
 config(['$locationProvider', '$routeProvider', function($locationProvider, $routeProvider) {
   $locationProvider.hashPrefix('!');
 
-  $routeProvider.otherwise({redirectTo: '/view1'});
+  $routeProvider.otherwise({redirectTo: '/paso1'});
 }]);

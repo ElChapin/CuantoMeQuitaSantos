@@ -1,15 +1,15 @@
 'use strict';
 
-angular.module('myApp.view1', ['ngRoute'])
+angular.module('myApp.paso1', ['ngRoute'])
 
 .config(['$routeProvider', function($routeProvider) {
-  $routeProvider.when('/view1', {
-    templateUrl: 'view1/view1.html',
-    controller: 'View1Ctrl'
+  $routeProvider.when('/paso1', {
+    templateUrl: 'paso1/paso1.html',
+    controller: 'Paso1Ctrl'
   });
 }])
 
-.controller('View1Ctrl', function($scope) {
+.controller('Paso1Ctrl', function($scope) {
 
   var UVT = 29753;
   $scope.salarioMinimo = 689454;
