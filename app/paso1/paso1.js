@@ -275,9 +275,9 @@ angular.module('myApp.paso1', ['ngRoute'])
     //25% del subtotal 4 Limitadas a 240 uvt (7.140.480 AÑO 2016), Art.206 Numeral 10. El cálculo de esta renta exenta se efectuará una vez se detraiga del valor total de los pagos laborales recibidos por el trabajador, los ingresos no constitutivos de renta, las deducciones y las demás rentas exentas diferentes a la establecida en el presente numeral
     var rentaExcentaTrabajo = subtotal * .25 / UVT > 240 ? 240 * UVT : subtotal * .25;
     $scope.baseGravableRetefuente = subtotal - rentaExcentaTrabajo;
-    var retencion = conReforma ? calcularRetencionReforma($scope.baseGravableRetefuente) : calcularRetencionActual($scope.baseGravableRetefuente);
+    var retefuente = conReforma ? calcularRetencionReforma($scope.baseGravableRetefuente) : calcularRetencionActual($scope.baseGravableRetefuente);
     
-    flujoEfectivoMensual -= retencion;    
+    flujoEfectivoMensual -= retefuente;    
     
     //5. Flujo efectivo anual
     //=El flujo mensual, y si no es salario integral un salario de prima + 12% de intereses sobre cesantías (como son un salario, se suma 1.12 veces el salario)
@@ -294,7 +294,7 @@ angular.module('myApp.paso1', ['ngRoute'])
     form.find('[name="aporteFSP"]').val(formatValueToCurency(aporteFSP));
     form.find('[name="seguridadSocial"]').val(formatValueToCurency(aporteObligatorioSalud +aporteObligatorioPension + aporteFSP));
     form.find('[name="baseGravable"]').val(formatValueToCurency($scope.baseGravableRetefuente));
-    form.find('[name="retencion"]').val(formatValueToCurency(retencion));
+    form.find('[name="retencion"]').val(formatValueToCurency(retefuente));
     form.find('[name="aporteTotalPension"]').val(formatValueToCurency(totalAportePension));
     form.find('[name="ahorroAnual"]').val(formatValueToCurency(cesantias + aporteAFC * 12));
     form.find('[name="flujoMensual"]').val(formatValueToCurency(flujoEfectivoMensual));
@@ -302,10 +302,11 @@ angular.module('myApp.paso1', ['ngRoute'])
 
     //8. Cálculo de impuesto de renta
     var valoresRenta = {
-        salario: $scope.salario,
-        ingresosNoConstirutivosDeRenta: ingresosNoConstirutivosDeRenta,
-        deducciones: deducciones,
-        rentasExentas: rentasExentas
+        salario: $scope.salario * 13,//12 salarios más las 2 primas de medio salario
+        ingresosNoConstirutivosDeRenta: ingresosNoConstirutivosDeRenta * 12,
+        deducciones: deducciones * 12,
+        rentasExentas: rentasExentas * 12,
+        retefuente: retefuente * 12
     }
 
     var renta = conReforma ? calcularRentaReforma(valoresRenta) : calcularRentaActual(valoresRenta);
@@ -313,8 +314,8 @@ angular.module('myApp.paso1', ['ngRoute'])
 
     return {
         pagosSeguridadSocial: aporteObligatorioSalud +aporteObligatorioPension + aporteFSP,
-        retefuente: retencion,
-        renta: renta,
+        retefuente: retefuente,
+        renta: renta > 0 ? renta : 0,
         flujoMensual: flujoEfectivoMensual,
         flujoAnual: flujoEfectivoAnual,
         CanastaBasica: conReforma ? 121350 : 117750
@@ -334,8 +335,12 @@ angular.module('myApp.paso1', ['ngRoute'])
      * > 4.100 	En adelante 33% 	            (Renta gravable o ganancia ocasional gravable expresada en UVT menos 4.100 UVT)*33% más 788 UVT
      */
     var calcularTarifaRentaActual = function (rentaGravable) {
+
         var rentaGravableUVT = rentaGravable / UVT;
         var rentaUVT = 0;
+
+        console.log(rentaGravable);
+        console.log(rentaGravableUVT);
 
         if (rentaGravableUVT > 4100)
             rentaUVT = (rentaGravableUVT - 4100) * .33 + 788;
@@ -363,6 +368,7 @@ angular.module('myApp.paso1', ['ngRoute'])
      * > 4000     	En adelante 35% 	        (Renta gravable o ganancia ocasional gravable expresada en UVT menos 4000 UVT)*35% más 870 UVT
      */
     var calcularTarifaRentaReforma = function (rentaGravable) {
+        
         var rentaGravableUVT = rentaGravable / UVT;
         var rentaUVT = 0;
 
@@ -384,6 +390,7 @@ angular.module('myApp.paso1', ['ngRoute'])
      * Calcular renta de ET vigente
      */
     var calcularRentaActual = function(valores) {
+
         var impuestoNetoRenta = 0;
 
         // TODO 1. Determinar si es residente o no residente
@@ -410,7 +417,7 @@ angular.module('myApp.paso1', ['ngRoute'])
                 // 4. Identificar sistemas de determinación: ordinario, IMAN, IMAS
                 // 4.1. Ordinario (26 ET)
                 var rentaLiquida =
-                     (valores.salario * 12)
+                    valores.salario
                     - valores.ingresosNoConstirutivosDeRenta
                     // - valores.devoluciones // Ingreso neto
                     // - valores.costos // Renta bruta
@@ -444,6 +451,7 @@ angular.module('myApp.paso1', ['ngRoute'])
 
     var calcularRentaReforma = function (valores) {
 
+        return 0;
     }
 
   function calcularIVAMercadoReforma()
