@@ -120,58 +120,6 @@ angular.module('myApp.paso1', ['ngRoute'])
     return retencionUVT * UVT;
   }
 
-    /*
-    Art. 241. Tarifa para las personas naturales y extranjeras residentes y asignaciones y donaciones modales.
-    * -Modificado- El impuesto sobre la renta de las personas naturales residentes en el país, de las sucesiones de causantes residentes en el país, y de los bienes destinados a fines especiales, en virtud de donaciones o asignaciones modales, se determinará de acuerdo con la tabla que contiene el presente artículo:
-    TABLA DEL IMPUESTO SOBRE LA RENTA Y COMPLEMENTARIOS
-
-    RANGOS EN UVT    	    TARIFA MARGINAL 	IMPUESTO
-    DESDE 	    HASTA
-    > 0   	    1.090 	    0% 	                0
-    > 1.090 	1.700 	    19% 	            (Renta gravable o ganancia ocasional gravable expresada en UVT menos 1.090 UVT)*19%
-    > 1.700 	4.100 	    28% 	            (Renta gravable o ganancia ocasional gravable expresada en UVT menos 1.700 UVT)*28% más 116 UVT
-    > 4.100 	En adelante 33% 	            (Renta gravable o ganancia ocasional gravable expresada en UVT menos 4.100 UVT)*33% más 788 UVT
-    */
-    var calcularRentaActual = function (rentaGravable) {
-        var rentaGravableUVT = rentaGravable / UVT;
-        var rentaUVT = 0;
-
-        if (rentaGravableUVT > 4100)
-            rentaUVT = (rentaGravableUVT - 4100) * .33 + 788;
-        else if (rentaGravableUVT > 1700)
-            rentaUVT = (rentaGravableUVT - 1700) * .28 + 116;
-        else if (rentaGravableUVT > 1090)
-            rentaUVT = (rentaGravableUVT - 1090) * .19;
-
-        return rentaUVT * UVT;
-    }
-
-    /*
-    Art. 241. Tarifa para las personas naturales y extranjeras residentes y asignaciones y donaciones modales.
-    * -Modificado- El impuesto sobre la renta de las personas naturales residentes en el país, de las sucesiones de causantes residentes en el país, y de los bienes destinados a fines especiales, en virtud de donaciones o asignaciones modales, se determinará de acuerdo con la tabla que contiene el presente artículo:
-    TABLA DEL IMPUESTO SOBRE LA RENTA Y COMPLEMENTARIOS
-
-    RANGOS EN UVT    	    TARIFA MARGINAL 	IMPUESTO
-    DESDE 	    HASTA
-    > 0   	    ?    	    0% 	                0
-    > ?      	?    	    10% 	            (Renta gravable o ganancia ocasional gravable expresada en UVT menos ? UVT)*10%
-    > ?      	?    	    20% 	            (Renta gravable o ganancia ocasional gravable expresada en UVT menos ? UVT)*20% más ? UVT
-    > ?      	En adelante 35% 	            (Renta gravable o ganancia ocasional gravable expresada en UVT menos ? UVT)*35% más ? UVT
-    */
-    var calcularRentaReforma = function (rentaGravable) {
-        var rentaGravableUVT = rentaGravable / UVT;
-        var rentaUVT = 0;
-
-        if (rentaGravableUVT > 4100)
-            rentaUVT = (rentaGravableUVT - 4100) * .35 + 788;
-        else if (rentaGravableUVT > 1700)
-            rentaUVT = (rentaGravableUVT - 1700) * .20 + 116;
-        else if (rentaGravableUVT > 1090)
-            rentaUVT = (rentaGravableUVT - 1090) * .10;
-
-        return rentaUVT * UVT;
-    }
-
   var calculoSalarioGeneral = function () {
 
       $scope.actual = calculoSalario()
@@ -302,7 +250,7 @@ angular.module('myApp.paso1', ['ngRoute'])
 
     //TODO: Cómo va ahí "Rentas de trabajo exentas numerales del 1 al 9 artículo 206 ET"
     //TODO: según el procedimeinto debería incluir o no el aporte FSP (supuestamente sí)
-    var rentasExcentas = 
+    var rentasExentas = 
         aporteObligatorioPension + aporteFSP //a. Aportes Obligatorios a Pensiones y fondo solidaridad pensional (Ley 100 1993 Art. 135)		
         + aporteFVP //b. Aportes Voluntarios Empleador Fondo de Pensiones (Art 126 -1 E.T.)		
         + aporteAFC //c. Aportes a cuentas AFC (Art 126 - 4 E.T.)
@@ -312,7 +260,7 @@ angular.module('myApp.paso1', ['ngRoute'])
         + 0 //g. Indemnizaciones por enfermedad, maternidad o accidente de trabajo		
         ;
       //TODO: según esto http://www.gerencie.com/disminucion-de-la-base-de-retencion-por-aportes-obligatorios-a-salud-y-pension.html y según el este artículo del estatuto tributario http://www.secretariasenado.gov.co/senado/basedoc/codigo/estatuto_tributario_pr006.html#126-1 debería sumarse a las rentas excentas el aporte a pension que hace el empleador
-      //var rentasExcentas = totalAportePension + $scope.aporteFSP + $scope.aporteAFC;
+      //var rentasExentas = totalAportePension + $scope.aporteFSP + $scope.aporteAFC;
     
     //TODO: dice Aportes obligatorios a salud efectuados por el trabajador (año anterior), pero es así en el procedimeinto 1?
     var deducciones = 
@@ -321,7 +269,7 @@ angular.module('myApp.paso1', ['ngRoute'])
         + deduccionPagosSalud
         + deduccionDependientes;
     
-    var subtotal = pagosLaborales - ingresosNoConstirutivosDeRenta - rentasExcentas - deducciones;
+    var subtotal = pagosLaborales - ingresosNoConstirutivosDeRenta - rentasExentas - deducciones;
     
     //3.1.5: Cálculo retención
     //25% del subtotal 4 Limitadas a 240 uvt (7.140.480 AÑO 2016), Art.206 Numeral 10. El cálculo de esta renta exenta se efectuará una vez se detraiga del valor total de los pagos laborales recibidos por el trabajador, los ingresos no constitutivos de renta, las deducciones y las demás rentas exentas diferentes a la establecida en el presente numeral
@@ -353,8 +301,15 @@ angular.module('myApp.paso1', ['ngRoute'])
     form.find('[name="flujoAnual"]').val(formatValueToCurency(flujoEfectivoAnual));*/
 
     //8. Cálculo de impuesto de renta
-    var rentaGravable = $scope.salario - interesesOCorreccionMonetariaPrestamosVivienda - deduccionPagosSalud - aporteObligatorioSalud - rentasExcentas;
-    var renta = conReforma ? calcularRentaReforma(rentaGravable) : calcularRentaActual(rentaGravable);
+    var valoresRenta = {
+        salario: $scope.salario,
+        ingresosNoConstirutivosDeRenta: ingresosNoConstirutivosDeRenta,
+        deducciones: deducciones,
+        rentasExentas: rentasExentas
+    }
+
+    var renta = conReforma ? calcularRentaReforma(valoresRenta) : calcularRentaActual(valoresRenta);
+    flujoEfectivoAnual -= renta;
 
     return {
         pagosSeguridadSocial: aporteObligatorioSalud +aporteObligatorioPension + aporteFSP,
@@ -365,6 +320,131 @@ angular.module('myApp.paso1', ['ngRoute'])
         CanastaBasica: conReforma ? 121350 : 117750
     }
   }
+
+    /**
+     * Art. 241. Tarifa para las personas naturales y extranjeras residentes y asignaciones y donaciones modales.
+     * * -Modificado- El impuesto sobre la renta de las personas naturales residentes en el país, de las sucesiones de causantes residentes en el país, y de los bienes destinados a fines especiales, en virtud de donaciones o asignaciones modales, se determinará de acuerdo con la tabla que contiene el presente artículo:
+     * TABLA DEL IMPUESTO SOBRE LA RENTA Y COMPLEMENTARIOS
+     *
+     * RANGOS EN UVT    	    TARIFA MARGINAL 	IMPUESTO
+     * DESDE 	    HASTA
+     * > 0   	    1.090 	    0% 	                0
+     * > 1.090 	1.700 	    19% 	            (Renta gravable o ganancia ocasional gravable expresada en UVT menos 1.090 UVT)*19%
+     * > 1.700 	4.100 	    28% 	            (Renta gravable o ganancia ocasional gravable expresada en UVT menos 1.700 UVT)*28% más 116 UVT
+     * > 4.100 	En adelante 33% 	            (Renta gravable o ganancia ocasional gravable expresada en UVT menos 4.100 UVT)*33% más 788 UVT
+     */
+    var calcularTarifaRentaActual = function (rentaGravable) {
+        var rentaGravableUVT = rentaGravable / UVT;
+        var rentaUVT = 0;
+
+        if (rentaGravableUVT > 4100)
+            rentaUVT = (rentaGravableUVT - 4100) * .33 + 788;
+        else if (rentaGravableUVT > 1700)
+            rentaUVT = (rentaGravableUVT - 1700) * .28 + 116;
+        else if (rentaGravableUVT > 1090)
+            rentaUVT = (rentaGravableUVT - 1090) * .19;
+
+        return rentaUVT * UVT;
+    }
+
+    /**
+     * Fuente: http://static.iris.net.co/dinero/upload/documents/reformatributaria2016.pdf
+     * Art. 241. Tarifa para las personas naturales y extranjeras residentes y asignaciones y donaciones modales.
+     * * -Modificado- El impuesto sobre la renta de las personas naturales residentes en el país, de las sucesiones de causantes residentes en el país, y de los bienes destinados a fines especiales, en virtud de donaciones o asignaciones modales, se determinará de acuerdo con la tabla que contiene el presente artículo:
+     * TABLA DEL IMPUESTO SOBRE LA RENTA Y COMPLEMENTARIOS
+     *
+     * RANGOS EN UVT    	    TARIFA MARGINAL IMPUESTO
+     * DESDE 	    HASTA
+     * > 0   	    600    	    0% 	            0
+     * > 600      	1000   	    10% 	        (Renta gravable o ganancia ocasional gravable expresada en UVT menos 600 UVT)*10%
+     * > 1000      2000   	    20% 	        (Renta gravable o ganancia ocasional gravable expresada en UVT menos 1000 UVT)*20% más 40 UVT
+     * > 2000      3000   	    30% 	        (Renta gravable o ganancia ocasional gravable expresada en UVT menos 2000 UVT)*30% más 240 UVT
+     * > 3000      4000   	    33% 	        (Renta gravable o ganancia ocasional gravable expresada en UVT menos 3000 UVT)*33% más 540 UVT
+     * > 4000     	En adelante 35% 	        (Renta gravable o ganancia ocasional gravable expresada en UVT menos 4000 UVT)*35% más 870 UVT
+     */
+    var calcularTarifaRentaReforma = function (rentaGravable) {
+        var rentaGravableUVT = rentaGravable / UVT;
+        var rentaUVT = 0;
+
+        if (rentaGravableUVT > 4000)
+            rentaUVT = (rentaGravableUVT - 4000) * .35 + 870;
+        else if (rentaGravableUVT > 3000)
+            rentaUVT = (rentaGravableUVT - 3000) * .33 + 540;
+        else if (rentaGravableUVT > 2000)
+            rentaUVT = (rentaGravableUVT - 2000) * .30 + 240;
+        else if (rentaGravableUVT > 1000)
+            rentaUVT = (rentaGravableUVT - 1000) * .20 + 40;
+        else if (rentaGravableUVT > 600)
+            rentaUVT = (rentaGravableUVT - 600) * .10;
+
+        return rentaUVT * UVT;
+    }
+
+    /**
+     * Calcular renta de ET vigente
+     */
+    var calcularRentaActual = function(valores) {
+        var impuestoNetoRenta = 0;
+
+        // TODO 1. Determinar si es residente o no residente
+        var residente = true;
+        // TODO 2. Determinar si debe declarar
+        // 2.1. Sin residencia: si aplicó retefuente ingresos totales año AND conceptos 407-411 ET
+        // 2.2. Con residencia: IB > 1400 UVT || PB > 4500 UVT || consumos tarjeta credito > 2800 UVT || compras > 2800 UVT ||
+        //                      consignaciones > 4500 UVT || !(IVA régimen común)
+        var declaraRentaResidente = true;
+        var declaraRenta = residente ? declaraRentaResidente : false;
+
+        if (declaraRenta) {
+            // TODO 3. Clasificar: empleado, TCP, otros (329 ET)
+            // 3.1. Conjunto 1: IB > 80 % por vinculación laboral
+            var conjunto1 = true;
+            // 3.2. Conjunto 2: IB > 80 % por servicios personales AND no actividad por propia cuenta y riesgo
+            var conjunto2 = true;
+            // 3.3. Conjunto 3: IB > 80 % por servicios personales AND actividad por propia cuenta y riesgo
+            // AND no servicios técnicos AND IB < 20 % por actividades 340 ET AND IB < 20 % por mercancias (...)
+            var conjunto3 = true;
+            var empleado = conjunto1 || conjunto2 || conjunto3;
+
+            if (empleado) {
+                // 4. Identificar sistemas de determinación: ordinario, IMAN, IMAS
+                // 4.1. Ordinario (26 ET)
+                var rentaLiquida =
+                     (valores.salario * 12)
+                    - valores.ingresosNoConstirutivosDeRenta
+                    // - valores.devoluciones // Ingreso neto
+                    // - valores.costos // Renta bruta
+                    - valores.deducciones;
+                var rentaPresuntiva = 0; // TODO Renta presuntiva
+
+                var rentaLiquidaGravable = (rentaLiquida > rentaPresuntiva) ? rentaLiquida : rentaPresuntiva;
+                    rentaLiquidaGravable -= valores.rentasExentas;
+
+                var impuestoBasicoRenta = calcularTarifaRentaActual(rentaLiquidaGravable);
+                var descuentosTributarios = 0; // TODO Descuentos tributarios
+                impuestoNetoRenta = impuestoBasicoRenta - descuentosTributarios;
+
+                // 4.2. IMAN (330 ET)
+                var rentaGravableAlternativa =
+                     (valores.salario * 12)
+                    - valores.ingresosNoConstirutivosDeRenta
+                    - valores.rentasExentas;
+                // TODO 4.2.1. Tabla tarifas IMAN (333 ET)
+            }
+
+            if (false) {
+                // TODO: TCP y otros
+            }
+
+            // 5. Identificar formularios y calcular impuesto
+        }
+
+        return impuestoNetoRenta;
+    }
+
+    var calcularRentaReforma = function (valores) {
+
+    }
 
   function calcularIVAMercadoReforma()
   {
