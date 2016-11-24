@@ -309,7 +309,27 @@ angular.module('myApp.paso1', ['ngRoute'])
         retefuente: retefuente * 12
     }
 
-    var renta = conReforma ? calcularRentaReforma(valoresRenta) : calcularRentaActual(valoresRenta);
+    var valoresCedula = {
+        rentaTrabajo: {
+            ingresosNoConstitutivosRenta: 0,
+            rentasExentas: 0
+        },
+        rentaPension: {
+            ingresosNoConstitutivosRenta: 0,
+            rentasExentas: 0
+        },
+        rentaCapital: {
+            ingresosNoConstitutivosRenta: 0,
+            rentasExentas: 0
+        },
+        rentaNoLaboral: {
+            ingresosNoConstitutivosRenta: 0,
+            rentasExentas: 0
+        },
+        rentaDividendos: 0
+    }
+
+    var renta = conReforma ? calcularRentaReforma(valoresCedula) : calcularRentaActual(valoresRenta);
     flujoEfectivoAnual -= renta;
 
     return {
@@ -321,6 +341,13 @@ angular.module('myApp.paso1', ['ngRoute'])
         CanastaBasica: conReforma ? 121350 : 117750
     }
   }
+
+  function calcularIVAMercadoReforma()
+  {
+      return
+  }
+
+    // IMPUESTO DE RENTA A PERSONAS NATURALES
 
     /**
      * Art. 241. Tarifa para las personas naturales y extranjeras residentes y asignaciones y donaciones modales.
@@ -417,12 +444,12 @@ angular.module('myApp.paso1', ['ngRoute'])
                 // 4. Identificar sistemas de determinación: ordinario, IMAN, IMAS
                 // 4.1. Ordinario (26 ET)
                 var rentaLiquida =
-                    valores.salario
+                      valores.salario
                     - valores.ingresosNoConstirutivosDeRenta
                     // - valores.devoluciones // Ingreso neto
                     // - valores.costos // Renta bruta
                     - valores.deducciones;
-                var rentaPresuntiva = 0; // TODO Renta presuntiva
+                var rentaPresuntiva = 0; // TODO Renta presuntiva = Patrimonio líquido año anterior - Valores patrimoniales (189 ET)
 
                 var rentaLiquidaGravable = (rentaLiquida > rentaPresuntiva) ? rentaLiquida : rentaPresuntiva;
                     rentaLiquidaGravable -= valores.rentasExentas;
@@ -433,10 +460,11 @@ angular.module('myApp.paso1', ['ngRoute'])
 
                 // 4.2. IMAN (330 ET)
                 var rentaGravableAlternativa =
-                     (valores.salario * 12)
+                      valores.salario
                     - valores.ingresosNoConstirutivosDeRenta
                     - valores.rentasExentas;
                 // TODO 4.2.1. Tabla tarifas IMAN (333 ET)
+
             }
 
             if (false) {
@@ -449,13 +477,59 @@ angular.module('myApp.paso1', ['ngRoute'])
         return impuestoNetoRenta;
     }
 
-    var calcularRentaReforma = function (valores) {
+    /**
+     * TÍTULO V ET Reforma Tributaria 2016
+     * TODO Descomponer ingresos no constitutivos de renta y rentas exentas por cada cédula
+     */
+    var calcularRentaReforma = function (valoresCedula) {
 
-        return 0;
+        var rentasExentasAplicadas = false;
+        // Rentas cedulares: trabajo, pensión, no laboral, capital, dividendos
+
+        // 1. Rentas de trabajo (103 ET): salarios, comisiones, prestaciones sociales, viáticos, gastos de representación
+        // honorarios, emolumentos eclesiásticos, compensaciones cooperativas, servicios personales
+        var rentaTrabajo = 0;
+        rentaTrabajo -= valoresCedula.rentaTrabajo.ingresosNoConstitutivosRenta;
+
+        if (valoresCedula.rentaTrabajo.rentasExentas < rentaTrabajo * .35 && rentaTrabajo / UVT < 3500) {
+            rentaTrabajo -= valoresCedula.rentaTrabajo.rentasExentas;
+            rentasExentasAplicadas = true;
+        }
+
+        // 2. Rentas de pensiones (206.5 ET): jubilación, invalidez, vejez, sobrevivientes > 1000 UVT
+        var rentaPension = 0;
+
+        if (rentaPension / 12 / UVT > 1000)
+            rentaPension -= valoresCedula.rentaPension.ingresosNoConstitutivosRenta;
+        if (!rentasExentasAplicadas)
+            rentaPension -= valoresCedula.rentaPension.rentasExentas;
+
+        // 3. Rentas de capital: intereses, rendimientos financieros, arrendamientos, regalías, propiedad intelectual
+        var rentaCapital = 0;
+        rentaCapital -= valoresCedula.rentaCapital.ingresosNoConstitutivosRenta;
+
+        if (valoresCedula.rentaCapital.rentasExentas < rentaCapital * .10 && rentaCapital / UVT < 3500
+            && !rentasExentasAplicadas) {
+            rentaCapital -= valoresCedula.rentaCapital.rentasExentas;
+            rentasExentasAplicadas = true;
+        }
+
+        // 4. Rentas no laborales: diferentes a las anteriores, además de honorarios
+        var rentaNoLaboral = 0;
+        rentaNoLaboral -= valoresCedula.rentaNoLaboral.ingresosNoConstitutivosRenta;
+
+        if (valoresCedula.rentaNoLaboral.rentasExentas < rentaNoLaboral * .10 && rentaNoLaboral / UVT < 3500
+            && !rentasExentasAplicadas) {
+            rentaNoLaboral -= valoresCedula.rentaNoLaboral.rentasExentas;
+            rentasExentasAplicadas = true;
+        }
+
+        // TODO Cédula dividentos
+        var rentaDividendos = 0;
+
+        var rentaLiquidaGravable = rentaTrabajo + rentaPension + rentaCapital + rentaNoLaboral;
+
+        return calcularTarifaRentaReforma(rentaLiquidaGravable);
     }
 
-  function calcularIVAMercadoReforma()
-  {
-      return 
-  }
 });
