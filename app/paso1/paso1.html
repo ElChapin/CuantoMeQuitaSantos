@@ -96,9 +96,12 @@
             <td><strong>{{actual.retefuente * 12 | currency:"$ ":0}}</strong></td>
           </tr>
           <tr class="danger">
+            <td>Base gravable renta</td>
+            <td>{{actual.renta.baseGravable > 0 ? actual.renta.baseGravable : 0  | currency:"$ ":0}}</td>
+          </tr>
+          <tr class="danger">
             <td>Impuesto de renta</td>
-            <td>{{actual.renta | currency:"$ ":0}}</td>
-            <!--td>En construcción...</td-->
+            <td>{{actual.renta.impuesto > 0 ? actual.renta.impuesto : 0 | currency:"$ ":0}}</td>
           </tr>
           <!--<tr>
             <td>Canasta básica</td>
@@ -124,9 +127,12 @@
             <td><strong>{{reforma.retefuente * 12 | currency:"$ ":0}}</strong></td>
           </tr>
           <tr class="danger">
+            <td>Base gravable renta</td>
+            <td>{{reforma.renta.baseGravable > 0 ? reforma.renta.baseGravable : 0  | currency:"$ ":0}}</td>
+          </tr>
+          <tr class="danger">
             <td>Impuesto de renta</td>
-            <td>{{reforma.renta | currency:"$ ":0}}</td>
-            <!--td>En construcción...</td-->
+            <td>{{reforma.renta.impuesto > 0 ? reforma.renta.impuesto : 0  | currency:"$ ":0}}</td>
           </tr>
           <!--<tr>
             <td>Canasta básica</td>

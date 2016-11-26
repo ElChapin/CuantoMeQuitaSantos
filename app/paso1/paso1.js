@@ -334,12 +334,12 @@ angular.module('myApp.paso1', ['ngRoute'])
     }
 
     var renta = conReforma ? calcularRentaReforma(valoresCedula) : calcularRentaActual(valoresRenta);
-    flujoEfectivoAnual -= renta;
+    flujoEfectivoAnual -= renta.impuesto;
 
     return {
         pagosSeguridadSocial: aporteObligatorioSalud +aporteObligatorioPension + aporteFSP,
         retefuente: retefuente,
-        renta: renta > 0 ? renta : 0,
+        renta: renta,
         flujoMensual: flujoEfectivoMensual,
         flujoAnual: flujoEfectivoAnual,
         CanastaBasica: conReforma ? 121350 : 117750
@@ -478,7 +478,7 @@ angular.module('myApp.paso1', ['ngRoute'])
             // 5. Identificar formularios y calcular impuesto
         }
 
-        return impuestoNetoRenta;
+        return { baseGravable: rentaLiquidaGravable, impuesto: impuestoNetoRenta };
     }
 
     /**
@@ -533,7 +533,7 @@ angular.module('myApp.paso1', ['ngRoute'])
 
         var rentaLiquidaGravable = rentaTrabajo + rentaPension + rentaCapital + rentaNoLaboral;
 
-        return calcularTarifaRentaReforma(rentaLiquidaGravable);
+        return { baseGravable: rentaLiquidaGravable, impuesto: calcularTarifaRentaReforma(rentaLiquidaGravable) };
     }
 
 });
