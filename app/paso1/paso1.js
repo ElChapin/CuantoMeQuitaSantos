@@ -311,18 +311,22 @@ angular.module('myApp.paso1', ['ngRoute'])
 
     var valoresCedula = {
         rentaTrabajo: {
-            ingresosNoConstitutivosRenta: 0,
-            rentasExentas: 0
+            renta: $scope.salario * 13,
+            ingresosNoConstitutivosRenta: (aporteAFC + ingresosNoConstirutivosDeRenta) * 12,
+            rentasExentas: (rentaExcentaTrabajo + cesantias) * 12
         },
         rentaPension: {
+            renta: 0,
             ingresosNoConstitutivosRenta: 0,
             rentasExentas: 0
         },
         rentaCapital: {
+            renta: 0,
             ingresosNoConstitutivosRenta: 0,
             rentasExentas: 0
         },
         rentaNoLaboral: {
+            renta: 0,
             ingresosNoConstitutivosRenta: 0,
             rentasExentas: 0
         },
@@ -366,9 +370,6 @@ angular.module('myApp.paso1', ['ngRoute'])
         var rentaGravableUVT = rentaGravable / UVT;
         var rentaUVT = 0;
 
-        console.log(rentaGravable);
-        console.log(rentaGravableUVT);
-
         if (rentaGravableUVT > 4100)
             rentaUVT = (rentaGravableUVT - 4100) * .33 + 788;
         else if (rentaGravableUVT > 1700)
@@ -398,6 +399,9 @@ angular.module('myApp.paso1', ['ngRoute'])
         
         var rentaGravableUVT = rentaGravable / UVT;
         var rentaUVT = 0;
+
+        console.log(rentaGravable);
+        console.log(rentaGravableUVT);
 
         if (rentaGravableUVT > 4000)
             rentaUVT = (rentaGravableUVT - 4000) * .35 + 870;
@@ -488,7 +492,7 @@ angular.module('myApp.paso1', ['ngRoute'])
 
         // 1. Rentas de trabajo (103 ET): salarios, comisiones, prestaciones sociales, viáticos, gastos de representación
         // honorarios, emolumentos eclesiásticos, compensaciones cooperativas, servicios personales
-        var rentaTrabajo = 0;
+        var rentaTrabajo = valoresCedula.rentaTrabajo.renta;
         rentaTrabajo -= valoresCedula.rentaTrabajo.ingresosNoConstitutivosRenta;
 
         if (valoresCedula.rentaTrabajo.rentasExentas < rentaTrabajo * .35 && rentaTrabajo / UVT < 3500) {
@@ -497,7 +501,7 @@ angular.module('myApp.paso1', ['ngRoute'])
         }
 
         // 2. Rentas de pensiones (206.5 ET): jubilación, invalidez, vejez, sobrevivientes > 1000 UVT
-        var rentaPension = 0;
+        var rentaPension = valoresCedula.rentaPension.renta;
 
         if (rentaPension / 12 / UVT > 1000)
             rentaPension -= valoresCedula.rentaPension.ingresosNoConstitutivosRenta;
@@ -505,7 +509,7 @@ angular.module('myApp.paso1', ['ngRoute'])
             rentaPension -= valoresCedula.rentaPension.rentasExentas;
 
         // 3. Rentas de capital: intereses, rendimientos financieros, arrendamientos, regalías, propiedad intelectual
-        var rentaCapital = 0;
+        var rentaCapital = valoresCedula.rentaCapital.renta;
         rentaCapital -= valoresCedula.rentaCapital.ingresosNoConstitutivosRenta;
 
         if (valoresCedula.rentaCapital.rentasExentas < rentaCapital * .10 && rentaCapital / UVT < 3500
@@ -515,7 +519,7 @@ angular.module('myApp.paso1', ['ngRoute'])
         }
 
         // 4. Rentas no laborales: diferentes a las anteriores, además de honorarios
-        var rentaNoLaboral = 0;
+        var rentaNoLaboral = valoresCedula.rentaNoLaboral.renta;
         rentaNoLaboral -= valoresCedula.rentaNoLaboral.ingresosNoConstitutivosRenta;
 
         if (valoresCedula.rentaNoLaboral.rentasExentas < rentaNoLaboral * .10 && rentaNoLaboral / UVT < 3500
@@ -524,7 +528,7 @@ angular.module('myApp.paso1', ['ngRoute'])
             rentasExentasAplicadas = true;
         }
 
-        // TODO Cédula dividentos
+        // TODO Cédula dividendos
         var rentaDividendos = 0;
 
         var rentaLiquidaGravable = rentaTrabajo + rentaPension + rentaCapital + rentaNoLaboral;
