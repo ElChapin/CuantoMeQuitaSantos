@@ -11,37 +11,48 @@ angular.module('myApp.paso1', ['ngRoute'])
 
 .controller('Paso1Ctrl', function($scope) {
 
+  $scope.paso2visible = false;
+
+  $scope.paso2 = function () {
+
+      $scope.paso2visible = true;
+  }
+
   var UVT = 29753;
   $scope.salarioMinimo = 689454;
 
   var anteriorSalario = 2500000;
 
+  $scope.entradas = {
+      sexo: 'f'
+  }
+
   $scope.limpiarSalario = function () {
 
-      $scope.salario = '';
+      $scope.entradas.salario = '';
   }
 
   $scope.resetSalario = function () {
     
-    if (!$scope.salario)
-        $scope.salario = anteriorSalario;
+    if (!$scope.entradas.salario)
+        $scope.entradas.salario = anteriorSalario;
   }
 
   $scope.resetSalario();
 
-  $scope.salarioIntegral = false;
+  $scope.entradas.salarioIntegral = false;
 
-  $scope.changeSalarioIntegral = function () {
-
-      $scope.salarioIntegral = !$scope.salarioIntegral;
-  }
-
-  $scope.$watch('salario', function () {
+  $scope.$watch('entradas.salario', function () {
     
     calculoSalarioGeneral()
   })
 
-  $scope.$watch('salarioIntegral', function () {
+  $scope.$watch('entradas.salarioIntegral', function () {
+    
+    calculoSalarioGeneral()
+  })
+
+  $scope.$watch('entradas.sexo', function () {
     
     calculoSalarioGeneral()
   })
@@ -130,12 +141,12 @@ angular.module('myApp.paso1', ['ngRoute'])
 
     //1: Entradas
     
-    var flujoEfectivoMensual = $scope.salario;
+    var flujoEfectivoMensual = $scope.entradas.salario;
     
     //1.1: Pagos Laborales efectuados durante el mes
     var pagosLaboralesHorasExtra = 0;
     var pagosLaboralesAuxiliosYSubsidios = 0;
-    if (pagosLaboralesAuxiliosYSubsidios > .4 * (pagosLaboralesAuxiliosYSubsidios + $scope.salario)) {
+    if (pagosLaboralesAuxiliosYSubsidios > .4 * (pagosLaboralesAuxiliosYSubsidios + $scope.entradas.salario)) {
         alert('Los Auxulios (60%-40%) no pueden superar el 40% del total del ingreso por salario + Auxulios y Subsidios');
         txtPagosLaboralesAuxiliosYSubsidios.val(formatValueToCurency(0));
     }
@@ -151,7 +162,7 @@ angular.module('myApp.paso1', ['ngRoute'])
     var aporteAFC = 0;
     var aporteFVP = 0;
 
-    if ((aporteAFC + aporteFVP) > $scope.salario * .3) {
+    if ((aporteAFC + aporteFVP) > $scope.entradas.salario * .3) {
         aporteAFC = 0;
         aporteFVP = 0;
         alert('Los aportes al Fondo Voluntario de Pensiones (FVP) sumados a los aportes las Cuentas de Ahorro para el Fomento de la Construcción (AFC) no pueden superar el 30% del ingreso laboral (salario)');
@@ -167,7 +178,7 @@ angular.module('myApp.paso1', ['ngRoute'])
     
     //2: Seguridad social
     
-    var IBC = ($scope.salarioIntegral) ? $scope.salario * .7 : $scope.salario;
+    var IBC = ($scope.entradas.salarioIntegral) ? $scope.entradas.salario * .7 : $scope.entradas.salario;
     if (IBC < $scope.salarioMinimo)
         IBC = $scope.salarioMinimo;
     else if (IBC > 25 * $scope.salarioMinimo)
@@ -177,17 +188,17 @@ angular.module('myApp.paso1', ['ngRoute'])
     var aporteObligatorioPension = IBC * .04;
     
     var aporteFSP = 0;
-      if($scope.salario > 20 * $scope.salarioMinimo)
+      if($scope.entradas.salario > 20 * $scope.salarioMinimo)
           aporteFSP = IBC * .02;
-      else if ($scope.salario >= 19 * $scope.salarioMinimo)
+      else if ($scope.entradas.salario >= 19 * $scope.salarioMinimo)
           aporteFSP = IBC * .018;
-      else if ($scope.salario >= 18 * $scope.salarioMinimo)
+      else if ($scope.entradas.salario >= 18 * $scope.salarioMinimo)
           aporteFSP = IBC * .014;
-      else if ($scope.salario >= 17 * $scope.salarioMinimo)
+      else if ($scope.entradas.salario >= 17 * $scope.salarioMinimo)
           aporteFSP = IBC * .013;
-      else if ($scope.salario >= 16 * $scope.salarioMinimo)
+      else if ($scope.entradas.salario >= 16 * $scope.salarioMinimo)
           aporteFSP = IBC * .012;
-    else if($scope.salario > 4 * $scope.salarioMinimo)
+    else if($scope.entradas.salario > 4 * $scope.salarioMinimo)
         aporteFSP = IBC * .01;
     
     //Aporte del empleado (4%) más aporte del empleador (12%)
@@ -209,7 +220,7 @@ angular.module('myApp.paso1', ['ngRoute'])
     var pagosLaboralesPagosTercerosAlimentacion = 0;
     
     //3.1.2: Cálculos ingresos no constitutivo de renta
-    var salarioUVT = $scope.salario / UVT;
+    var salarioUVT = $scope.entradas.salario / UVT;
 
     if (salarioUVT < 310) {
 
@@ -234,13 +245,13 @@ angular.module('myApp.paso1', ['ngRoute'])
 
     if (dependientes) {
 
-      deduccionDependientes = $scope.salario * .1;
+      deduccionDependientes = $scope.entradas.salario * .1;
       deduccionDependientes = (deduccionDependientes / UVT > 32) ? 32 * UVT : deduccionDependientes;
     }
     
     //3.1.4: Cálculo subtotal
     //TODO: Cómo va ahí "Cesantía, intereses sobre cesantía, prima mínima legal de servicios (sector privado) o de navidad (sector público) y vacaciones."
-    var pagosLaborales = $scope.salario + pagosLaboralesHorasExtra + pagosLaboralesAuxiliosYSubsidios + pagosLaboralesOtrosOrdinariosOExtraordinarios + pagosLaboralesPagosTercerosAlimentacion;
+    var pagosLaborales = $scope.entradas.salario + pagosLaboralesHorasExtra + pagosLaboralesAuxiliosYSubsidios + pagosLaboralesOtrosOrdinariosOExtraordinarios + pagosLaboralesPagosTercerosAlimentacion;
     
     //TODO: Cómo van ahí:
     // - Medios de transporte distintos del subsidio de transporte
@@ -281,11 +292,11 @@ angular.module('myApp.paso1', ['ngRoute'])
     
     //5. Flujo efectivo anual
     //=El flujo mensual, y si no es salario integral un salario de prima + 12% de intereses sobre cesantías (como son un salario, se suma 1.12 veces el salario)
-    var flujoEfectivoAnual = flujoEfectivoMensual * 12 + (($scope.salarioIntegral) ? 0 : $scope.salario * 1.12);
+    var flujoEfectivoAnual = flujoEfectivoMensual * 12 + (($scope.entradas.salarioIntegral) ? 0 : $scope.entradas.salario * 1.12);
     
     //6. Cesantía
     //=Un salario y 12% de intereses sobre la cesantía
-    var cesantias = ($scope.salarioIntegral) ? 0 : $scope.salario;
+    var cesantias = ($scope.entradas.salarioIntegral) ? 0 : $scope.entradas.salario;
     
     //7. Mostrar salidas
     /*form.find('[name="IBC"]').val(formatValueToCurency(IBC));
@@ -302,7 +313,7 @@ angular.module('myApp.paso1', ['ngRoute'])
 
     //8. Cálculo de impuesto de renta
     var valoresRenta = {
-        salario: $scope.salario * 13,//12 salarios más las 2 primas de medio salario
+        salario: $scope.entradas.salario * 13,//12 salarios más las 2 primas de medio salario
         ingresosNoConstirutivosDeRenta: ingresosNoConstirutivosDeRenta * 12,
         deducciones: deducciones * 12,
         rentasExentas: rentasExentas * 12,
@@ -311,7 +322,7 @@ angular.module('myApp.paso1', ['ngRoute'])
 
     var valoresCedula = {
         rentaTrabajo: {
-            renta: $scope.salario * 13,
+            renta: $scope.entradas.salario * 13,
             ingresosNoConstitutivosRenta: (aporteAFC + ingresosNoConstirutivosDeRenta) * 12,
             rentasExentas: (rentaExcentaTrabajo + cesantias) * 12
         },

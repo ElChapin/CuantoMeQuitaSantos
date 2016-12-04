@@ -1,149 +1,156 @@
-<br>
-<form class="form-horizontal">
-  <fieldset>
-    <legend>¡Vamos a jugar! ¿Cuánto me gano?</legend>
-    <div class="form-group">
-      <label for="inputSalario" class="col-md-2 control-label">Salario</label>
-      <div class="col-md-10">
-        <input ng-model="salario" ui-money-mask="0" ng-focus="limpiarSalario()" ng-blur="resetSalario()" type="text" class="form-control" id="inputSalario" placeholder="¿Cuánto ganas al mes?">
-      </div>
-    </div>
-    <div class="form-group" ng-if="salario >= 13 * salarioMinimo">
-      <label for="inputSalarioIntegral" class="col-md-2 control-label">¿Es salario integral?</label>
-      <div class="col-md-10">
-        <div class="togglebutton">
-          <label>
-            <input ng-model="salarioIntegral" ng-change="changeSalarioIntegral()" type="checkbox" id="inputSalarioIntegral">
-          </label>
-        </div>
-      </div>
-    </div>
-    <div class="form-group">
+<md-toolbar class="md-primary">
+  <div class="md-toolbar-tools">
+    <h2 class="md-flex">¡Vamos a jugar! ¿Cuánto me gano?</h2>
+  </div>
+</md-toolbar>
+<md-content md-theme="docs-dark" layout-gt-sm="row" layout-padding layout-align="center center">
+  <div>
+    <md-input-container>
+      <label>Salario</label>
+      <input ng-model="entradas.salario" ui-money-mask="0" ng-focus="limpiarSalario()" ng-blur="resetSalario()" placeholder="¿Cuánto ganas al mes?" class="big-input">
+    </md-input-container>
+
+    <md-input-container ng-if="entradas.salario >= 13 * salarioMinimo">
+      <md-switch class="md-primary" ng-model="entradas.salarioIntegral" aria-label="¿Es salario integral?">
+        ¿Es salario integral?
+      </md-switch>
+    </md-input-container>
+  </div>
+</md-content>
+<md-content layout-gt-sm="row" layout-padding layout-align="center center">
+  <p flex="33">Sexo</p>
+  <img flex="33" src="img/female.svg" ng-class="{'selected':entradas.sexo == 'f'}" ng-click="entradas.sexo = 'f'" class="icon-radio">
+  <img flex="33" src="img/male.svg" ng-class="{'selected': entradas.sexo == 'm'}" ng-click="entradas.sexo = 'm'" class="icon-radio">
+</md-content>
+<section layout="column" layout-align="center center" layout-wrap layout-padding>
+  <md-button ng-click="paso2()" ng-href="#paso2" du-smooth-scroll type="button" class="md-raised md-warn">Empezar</md-button>
+</section>
+<md-toolbar id="paso2" class="md-primary" ng-if="paso2visible">
+  <div class="md-toolbar-tools">
+    <h2 class="md-flex">Lo que me quitan y lo que me queda</h2>
+  </div>
+</md-toolbar>
+<md-content class="md-padding" ng-if="paso2visible">
+  <md-tabs class="md-warn" md-dynamic-height md-border-bottom>
+    <md-tab label="Cada mes">      
       <label class="col-md-2 control-label">Base gravable retefuente</label>
       <div class="col-md-10">
         {{baseGravableRetefuente | currency:"$ ":0}}
       </div>
-    </div>
-  </fieldset>
-</form>
-<fieldset>
-    <legend>Lo que me quitan y lo que me queda</legend>
-</fieldset>
-<uib-tabset active="active">
-  <uib-tab index="0" heading="Cada mes">
-    <div class="row">
-      <div class="col-md-6">
-        <table class="table">
-          <tr>
-            <th colspan="2">Actualmente</th>
-          </tr>
-          <tr class="warning">
-            <td>Pagos seguridad social</td>
-            <td>{{actual.pagosSeguridadSocial | currency:"$ ":0}}</td>
-          </tr>
-          <tr class="danger">
-            <td>Retefuente</td>
-            <td><strong>{{actual.retefuente | currency:"$ ":0}}</strong></td>
-          </tr>
-          <!--<tr>
-            <td>Canasta básica</td>
-            <td>{{actual.CanastaBasica | currency:"$ ":0}}</td>
-          </tr>-->
-          <tr class="success">
-            <td>Me quedan</td>
-            <td><strong>{{actual.flujoMensual | currency:"$ ":0}}</strong></td>
-          </tr>
-        </table>
+      <div class="row">
+        <div class="col-md-6">
+          <table class="table">
+            <tr>
+              <th colspan="2">Actualmente</th>
+            </tr>
+            <tr class="warning">
+              <td>Pagos seguridad social</td>
+              <td>{{actual.pagosSeguridadSocial | currency:"$ ":0}}</td>
+            </tr>
+            <tr class="danger">
+              <td>Retefuente</td>
+              <td><strong>{{actual.retefuente | currency:"$ ":0}}</strong></td>
+            </tr>
+            <!--<tr>
+              <td>Canasta básica</td>
+              <td>{{actual.CanastaBasica | currency:"$ ":0}}</td>
+            </tr>-->
+            <tr class="success">
+              <td>Me quedan</td>
+              <td><strong>{{actual.flujoMensual | currency:"$ ":0}}</strong></td>
+            </tr>
+          </table>
+        </div>
+        <div class="col-md-6">
+          <table class="table">
+            <tr>
+              <th colspan="2">Con La Reforma</th>
+            </tr>
+            <tr class="warning">
+              <td>Pagos seguridad social</td>
+              <td>{{reforma.pagosSeguridadSocial | currency:"$ ":0}}</td>
+            </tr>
+            <tr class="danger">
+              <td>Retefuente</td>
+              <td><strong>{{reforma.retefuente | currency:"$ ":0}}</strong></td>
+            </tr>
+            <!--<tr>
+              <td>Canasta básica</td>
+              <td>{{reforma.CanastaBasica | currency:"$ ":0}}</td>
+            </tr>-->
+            <tr class="success">
+              <td>Me quedan</td>
+              <td><strong>{{reforma.flujoMensual | currency:"$ ":0}}</strong></td>
+            </tr>
+          </table>
+        </div>
       </div>
-      <div class="col-md-6">
-        <table class="table">
-          <tr>
-            <th colspan="2">Con La Reforma</th>
-          </tr>
-          <tr class="warning">
-            <td>Pagos seguridad social</td>
-            <td>{{reforma.pagosSeguridadSocial | currency:"$ ":0}}</td>
-          </tr>
-          <tr class="danger">
-            <td>Retefuente</td>
-            <td><strong>{{reforma.retefuente | currency:"$ ":0}}</strong></td>
-          </tr>
-          <!--<tr>
-            <td>Canasta básica</td>
-            <td>{{reforma.CanastaBasica | currency:"$ ":0}}</td>
-          </tr>-->
-          <tr class="success">
-            <td>Me quedan</td>
-            <td><strong>{{reforma.flujoMensual | currency:"$ ":0}}</strong></td>
-          </tr>
-        </table>
+    </md-tab>
+    <md-tab label="Cada año">
+      <div class="row">
+        <div class="col-md-6">
+          <table class="table">
+            <tr>
+              <th colspan="2">Actualmente</th>
+            </tr>
+            <tr class="warning">
+              <td>Pagos seguridad social</td>
+              <td>{{actual.pagosSeguridadSocial * 12 | currency:"$ ":0}}</td>
+            </tr>
+            <tr class="danger">
+              <td>Retefuente</td>
+              <td><strong>{{actual.retefuente * 12 | currency:"$ ":0}}</strong></td>
+            </tr>
+            <tr class="danger">
+              <td>Base gravable renta</td>
+              <td>{{actual.renta.baseGravable > 0 ? actual.renta.baseGravable : 0  | currency:"$ ":0}}</td>
+            </tr>
+            <tr class="danger">
+              <td>Impuesto de renta</td>
+              <td>{{actual.renta.impuesto > 0 ? actual.renta.impuesto : 0 | currency:"$ ":0}}</td>
+            </tr>
+            <!--<tr>
+              <td>Canasta básica</td>
+              <td>{{actual.CanastaBasica | currency:"$ ":0}}</td>
+            </tr>-->
+            <tr class="success">
+              <td>Me quedan</td>
+              <td><strong>{{actual.flujoAnual | currency:"$ ":0}}</strong></td>
+            </tr>
+          </table>
+        </div>
+        <div class="col-md-6">
+          <table class="table">
+            <tr>
+              <th colspan="2">Con La Reforma</th>
+            </tr>
+            <tr class="warning">
+              <td>Pagos seguridad social</td>
+              <td>{{reforma.pagosSeguridadSocial * 12 | currency:"$ ":0}}</td>
+            </tr>
+            <tr class="danger">
+              <td>Retefuente</td>
+              <td><strong>{{reforma.retefuente * 12 | currency:"$ ":0}}</strong></td>
+            </tr>
+            <tr class="danger">
+              <td>Base gravable renta</td>
+              <td>{{reforma.renta.baseGravable > 0 ? reforma.renta.baseGravable : 0  | currency:"$ ":0}}</td>
+            </tr>
+            <tr class="danger">
+              <td>Impuesto de renta</td>
+              <td>{{reforma.renta.impuesto > 0 ? reforma.renta.impuesto : 0  | currency:"$ ":0}}</td>
+            </tr>
+            <!--<tr>
+              <td>Canasta básica</td>
+              <td>{{reforma.CanastaBasica | currency:"$ ":0}}</td>
+            </tr>-->
+            <tr class="success">
+              <td>Me quedan</td>
+              <td><strong>{{reforma.flujoAnual | currency:"$ ":0}}</strong></td>
+            </tr>
+          </table>
+        </div>
       </div>
-    </div>
-  </uib-tab>
-  <uib-tab index="1" heading="Cada año">
-    <div class="row">
-      <div class="col-md-6">
-        <table class="table">
-          <tr>
-            <th colspan="2">Actualmente</th>
-          </tr>
-          <tr class="warning">
-            <td>Pagos seguridad social</td>
-            <td>{{actual.pagosSeguridadSocial * 12 | currency:"$ ":0}}</td>
-          </tr>
-          <tr class="danger">
-            <td>Retefuente</td>
-            <td><strong>{{actual.retefuente * 12 | currency:"$ ":0}}</strong></td>
-          </tr>
-          <tr class="danger">
-            <td>Base gravable renta</td>
-            <td>{{actual.renta.baseGravable > 0 ? actual.renta.baseGravable : 0  | currency:"$ ":0}}</td>
-          </tr>
-          <tr class="danger">
-            <td>Impuesto de renta</td>
-            <td>{{actual.renta.impuesto > 0 ? actual.renta.impuesto : 0 | currency:"$ ":0}}</td>
-          </tr>
-          <!--<tr>
-            <td>Canasta básica</td>
-            <td>{{actual.CanastaBasica | currency:"$ ":0}}</td>
-          </tr>-->
-          <tr class="success">
-            <td>Me quedan</td>
-            <td><strong>{{actual.flujoAnual | currency:"$ ":0}}</strong></td>
-          </tr>
-        </table>
-      </div>
-      <div class="col-md-6">
-        <table class="table">
-          <tr>
-            <th colspan="2">Con La Reforma</th>
-          </tr>
-          <tr class="warning">
-            <td>Pagos seguridad social</td>
-            <td>{{reforma.pagosSeguridadSocial * 12 | currency:"$ ":0}}</td>
-          </tr>
-          <tr class="danger">
-            <td>Retefuente</td>
-            <td><strong>{{reforma.retefuente * 12 | currency:"$ ":0}}</strong></td>
-          </tr>
-          <tr class="danger">
-            <td>Base gravable renta</td>
-            <td>{{reforma.renta.baseGravable > 0 ? reforma.renta.baseGravable : 0  | currency:"$ ":0}}</td>
-          </tr>
-          <tr class="danger">
-            <td>Impuesto de renta</td>
-            <td>{{reforma.renta.impuesto > 0 ? reforma.renta.impuesto : 0  | currency:"$ ":0}}</td>
-          </tr>
-          <!--<tr>
-            <td>Canasta básica</td>
-            <td>{{reforma.CanastaBasica | currency:"$ ":0}}</td>
-          </tr>-->
-          <tr class="success">
-            <td>Me quedan</td>
-            <td><strong>{{reforma.flujoAnual | currency:"$ ":0}}</strong></td>
-          </tr>
-        </table>
-      </div>
-    </div>
-  </uib-tab>
-</uib-tabset>
+    </md-tab>
+  </md-tabs>
+</md-content>
