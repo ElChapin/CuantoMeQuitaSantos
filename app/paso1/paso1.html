@@ -18,12 +18,12 @@
   </div>
 </md-content>
 <md-content layout-gt-sm="row" layout-padding layout-align="center center">
-  <p flex="33">Sexo</p>
+  <div flex="33">Sexo</div>
   <img flex="33" src="img/female.svg" ng-class="{'selected':entradas.sexo == 'f'}" ng-click="entradas.sexo = 'f'" class="icon-radio">
   <img flex="33" src="img/male.svg" ng-class="{'selected': entradas.sexo == 'm'}" ng-click="entradas.sexo = 'm'" class="icon-radio">
 </md-content>
-<section layout="column" layout-align="center center" layout-wrap layout-padding>
-  <md-button ng-click="paso2()" ng-href="#paso2" du-smooth-scroll type="button" class="md-raised md-warn">Empezar</md-button>
+<section layout="column" layout-wrap>
+  <md-button ng-click="paso2()" ng-href="#paso2" du-smooth-scroll type="button" class="md-raised md-warn">¡Empezar!</md-button>
 </section>
 <md-toolbar id="paso2" class="md-primary" ng-if="paso2visible">
   <div class="md-toolbar-tools">
