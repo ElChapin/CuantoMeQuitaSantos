@@ -21,8 +21,4 @@ config(['$locationProvider', '$routeProvider', '$mdThemingProvider', '$mdIconPro
   $mdThemingProvider.theme('docs-dark')
       .primaryPalette('yellow')
       .dark();
-
-  $mdIconProvider  // Register a specific icon (by name)
-       .icon('sex:male', 'img/male.svg')
-        .icon('sex:female', 'img/female.svg');  
 }]);
