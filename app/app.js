@@ -6,6 +6,7 @@ angular.module('myApp', [
   'ui.utils.masks',
   'duScroll',
   'ngMaterial',
+  'myApp.services',
   'myApp.paso1',
   'myApp.version'
 ]).
@@ -22,4 +23,8 @@ config(['$locationProvider', '$routeProvider', '$mdThemingProvider', '$mdIconPro
   $mdThemingProvider.theme('docs-dark')
       .primaryPalette('yellow')
       .dark();
-}]);
+}])
+.constant('constantes', {
+  UVT: 29753,
+  salarioMinimo: 689454
+});
