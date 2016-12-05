@@ -22,8 +22,18 @@ angular.module('myApp.paso1', ['ngRoute'])
 
   var anteriorSalario = 2500000;
 
+  $scope.tiposContrato = [
+      { id: 'l', nombre: 'Laboral' },
+      { id: 'p', nombre: 'Prestación de Servicios' }
+  ]
+
   $scope.entradas = {
-      sexo: 'f'
+    sexo: 'f',
+    tipoContrato: $scope.tiposContrato[0].id,
+    encuentasConsumo: {
+        carro: true,
+        moto: false
+    }
   }
 
   $scope.limpiarSalario = function () {
@@ -41,25 +51,24 @@ angular.module('myApp.paso1', ['ngRoute'])
 
   $scope.entradas.salarioIntegral = false;
 
-  $scope.$watch('entradas.salario', function () {
+  $scope.$watch('entradas', function (oldValue, newValue) {
     
-    calculoSalarioGeneral()
-  })
-
-  $scope.$watch('entradas.salarioIntegral', function () {
-    
-    calculoSalarioGeneral()
-  })
-
-  $scope.$watch('entradas.sexo', function () {
-    
-    calculoSalarioGeneral()
-  })
+    if (newValue.tipoContrato == 'l')
+        calculoSalarioGeneral()
+    else
+        calculoPrestacionGeneral()
+  }, true)
 
   var calculoSalarioGeneral = function () {
 
       $scope.actual = calculoSalario()
       $scope.reforma = calculoSalario(true)
+  }
+
+  var calculoPrestacionGeneral = function () {
+
+      $scope.actual = calculoPrestacion()
+      $scope.reforma = calculoPrestacion(true)
   }
 
   var calculoSalario = function (conReforma) {
@@ -183,7 +192,7 @@ angular.module('myApp.paso1', ['ngRoute'])
     // - Medios de transporte distintos del subsidio de transporte
     // - "Cesantía, intereses sobre cesantía y prima mínima legal de servicios (sector privado) o de navidad (sector público)"
     // - Demás pagos que no incrementan el patrimonio del trabajador
-    var ingresosNoConstirutivosDeRenta = ingresoNoConstitutivoRentaPagosTercerosAlimentacion + viaticos;
+    var ingresosNoConstitutivosRenta = ingresoNoConstitutivoRentaPagosTercerosAlimentacion + viaticos;
 
     //TODO: Cómo va ahí "Rentas de trabajo exentas numerales del 1 al 9 artículo 206 ET"
     //TODO: según el procedimeinto debería incluir o no el aporte FSP (supuestamente sí)
@@ -206,7 +215,7 @@ angular.module('myApp.paso1', ['ngRoute'])
         + deduccionPagosSalud
         + deduccionDependientes;
     
-    var subtotal = pagosLaborales - ingresosNoConstirutivosDeRenta - rentasExentas - deducciones;
+    var subtotal = pagosLaborales - ingresosNoConstitutivosRenta - rentasExentas - deducciones;
     
     //3.1.5: Cálculo retención
     //25% del subtotal 4 Limitadas a 240 uvt (7.140.480 AÑO 2016), Art.206 Numeral 10. El cálculo de esta renta exenta se efectuará una vez se detraiga del valor total de los pagos laborales recibidos por el trabajador, los ingresos no constitutivos de renta, las deducciones y las demás rentas exentas diferentes a la establecida en el presente numeral
@@ -214,7 +223,26 @@ angular.module('myApp.paso1', ['ngRoute'])
     $scope.baseGravableRetefuente = subtotal - rentaExcentaTrabajo;
     var retefuente = conReforma ? retefuenteService.CalcularRetencionReforma($scope.baseGravableRetefuente) : retefuenteService.CalcularRetencionActual($scope.baseGravableRetefuente);
     
-    flujoEfectivoMensual -= retefuente;    
+    flujoEfectivoMensual -= retefuente;
+
+    //Indirectos
+
+    //Gasolina
+    var gasolina = $scope.entradas.encuentasConsumo.carro ? calcularImpuestosGasolinaCarro(conReforma) : $scope.entradas.encuentasConsumo.moto ? calcularImpuestosGasolinaMoto(conReforma) : 0
+    flujoEfectivoMensual -= gasolina.impuestos;
+
+    //Femeninos
+    var consumoProductosFemeninos = 0;
+
+    if ($scope.entradas.sexo == 'f')
+        consumoProductosFemeninos = 95000;
+        
+    var ivaProductosFemeninos = consumoProductosFemeninos * (conReforma ? .19 : .16);
+    var productosFemeninos = {
+        total: consumoProductosFemeninos + ivaProductosFemeninos,
+        iva: ivaProductosFemeninos
+    }
+    flujoEfectivoMensual -= productosFemeninos.iva;
     
     //5. Flujo efectivo anual
     //=El flujo mensual, y si no es salario integral un salario de prima + 12% de intereses sobre cesantías (como son un salario, se suma 1.12 veces el salario)
@@ -240,7 +268,7 @@ angular.module('myApp.paso1', ['ngRoute'])
     //8. Cálculo de impuesto de renta
     var valoresRenta = {
         salario: $scope.entradas.salario * 13,//12 salarios más las 2 primas de medio salario
-        ingresosNoConstirutivosDeRenta: ingresosNoConstirutivosDeRenta * 12,
+        ingresosNoConstitutivosRenta: ingresosNoConstitutivosRenta * 12,
         deducciones: deducciones * 12,
         rentasExentas: rentasExentas * 12,
         retefuente: retefuente * 12
@@ -249,7 +277,83 @@ angular.module('myApp.paso1', ['ngRoute'])
     var valoresCedula = {
         rentaTrabajo: {
             renta: $scope.entradas.salario * 13,
-            ingresosNoConstitutivosRenta: (aporteAFC + ingresosNoConstirutivosDeRenta) * 12,
+            ingresosNoConstitutivosRenta: (aporteAFC + ingresosNoConstitutivosRenta) * 12,
+            rentasExentas: (rentaExcentaTrabajo + cesantias) * 12
+        },
+        rentaPension: {
+            renta: 0,
+            ingresosNoConstitutivosRenta: 0,
+            rentasExentas: 0
+        },
+        rentaCapital: {
+            renta: 0,
+            ingresosNoConstitutivosRenta: 0,
+            rentasExentas: 0
+        },
+        rentaNoLaboral: {
+            renta: 0,
+            ingresosNoConstitutivosRenta: 0,
+            rentasExentas: 0
+        },
+        rentaDividendos: 0
+    }
+
+    var renta = conReforma ? rentaService.CalcularRentaReforma(valoresCedula) : rentaService.CalcularRentaActual(valoresRenta);
+    flujoEfectivoAnual -= renta.impuesto;
+
+    return {
+        pagosSeguridadSocial: aporteObligatorioSalud +aporteObligatorioPension + aporteFSP,
+        retefuente: retefuente,
+        indirectos: {
+            gasolina: gasolina,
+            productosFemeninos: productosFemeninos
+        },
+        renta: renta,
+        flujoMensual: flujoEfectivoMensual,
+        flujoAnual: flujoEfectivoAnual,
+        CanastaBasica: conReforma ? 121350 : 117750
+    }
+  }
+
+  var calculoPrestacion = function (conReforma) {
+
+    var aporteObligatorioSalud = 0;
+    var aporteObligatorioPension = 0;
+    var aporteFSP = 0;
+    
+    //1.3:Rentas excentas
+    var aporteAFC = 0;
+    var aporteFVP = 0;
+
+    var rentaExcentaTrabajo = 0;
+    var cesantias = 0;
+
+    var ingresosNoConstitutivosRenta = 0;
+    var deducciones = 0;
+    var rentasExentas = 0;
+
+    var retefuente = ($scope.entradas.salario - ingresosNoConstitutivosRenta - deducciones - rentasExentas) * .1;
+
+    if (conReforma)
+        retefuente = $scope.entradas.salario * .15;
+
+    var flujoEfectivoMensual = $scope.entradas.salario - retefuente;
+
+    var flujoEfectivoAnual = flujoEfectivoMensual * 12;
+
+    //8. Cálculo de impuesto de renta
+    var valoresRenta = {
+        salario: $scope.entradas.salario * 13,//12 salarios más las 2 primas de medio salario
+        ingresosNoConstitutivosRenta: ingresosNoConstitutivosRenta * 12,
+        deducciones: deducciones * 12,
+        rentasExentas: rentasExentas * 12,
+        retefuente: retefuente * 12
+    }
+
+    var valoresCedula = {
+        rentaTrabajo: {
+            renta: $scope.entradas.salario * 13,
+            ingresosNoConstitutivosRenta: (aporteAFC + ingresosNoConstitutivosRenta) * 12,
             rentasExentas: (rentaExcentaTrabajo + cesantias) * 12
         },
         rentaPension: {
@@ -281,6 +385,30 @@ angular.module('myApp.paso1', ['ngRoute'])
         flujoAnual: flujoEfectivoAnual,
         CanastaBasica: conReforma ? 121350 : 117750
     }
+  }
+
+  var calcularImpuestosGasolinaCarro = function (conReforma) {
+
+      return calcularImpuestosGasolina(30, conReforma)
+  }
+
+  var calcularImpuestosGasolinaMoto = function (conReforma) {
+
+      return calcularImpuestosGasolina(80, conReforma)
+  }
+
+  var calcularImpuestosGasolina = function (rendimientoKmsGalon, conReforma) {
+
+      var promedioKmsDia = 20;
+      var precioReferencia = 8046;//Bogota, nocimebre
+      var impuestoNacional = 1116;
+      var sobretasa = 1168;
+      var impuestoVerde = 135;
+
+      var consumoMes = (promedioKmsDia / rendimientoKmsGalon) * 30;
+      var totalImpuestos = (impuestoNacional + sobretasa + (conReforma ? 135 : 0)) * consumoMes;
+
+      return { impuestos: totalImpuestos, total: precioReferencia * consumoMes + totalImpuestos }
   }
 
   function calcularIVAMercadoReforma()

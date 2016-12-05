@@ -82,7 +82,7 @@ angular.module('myApp.services')
                 // 4.1. Ordinario (26 ET)
                 var rentaLiquida =
                       valores.salario
-                    - valores.ingresosNoConstirutivosDeRenta
+                    - valores.ingresosNoConstitutivosRenta
                     // - valores.devoluciones // Ingreso neto
                     // - valores.costos // Renta bruta
                     - valores.deducciones;
@@ -98,7 +98,7 @@ angular.module('myApp.services')
                 // 4.2. IMAN (330 ET)
                 var rentaGravableAlternativa =
                       valores.salario
-                    - valores.ingresosNoConstirutivosDeRenta
+                    - valores.ingresosNoConstitutivosRenta
                     - valores.rentasExentas;
                 // TODO 4.2.1. Tabla tarifas IMAN (333 ET)
 
