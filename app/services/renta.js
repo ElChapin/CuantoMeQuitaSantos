@@ -1,5 +1,5 @@
 angular.module('myApp.services')
-.factory('rentaService', function($q, commonService, constantes) {
+.factory('rentaService', function($q, $http, commonService, constantes) {
   
     var service = {};
 
@@ -48,6 +48,23 @@ angular.module('myApp.services')
             { bordeUVT: 3000, tarifa: .33, constanteUVT: 540 },
             { bordeUVT: 4000, tarifa: .35, constanteUVT: 870 }
         ]);
+    }
+
+    var calcularTarifaRentaIman = function (rentaGravableAlternativa, tablaTarifa) {
+        var rentaGravableAlternativaUVT = rentaGravableAlternativa / constantes.UVT;
+        var imanUVT = 0;
+
+        for (var i = tablaTarifa.length - 1; i >= 0 && imanUVT == 0; i--) {
+            if (rentaGravableAlternativaUVT > tablaTarifa[i].bordeUVT) {
+                 imanUVT = tablaTarifa[i].constanteUVT;
+            }
+        }
+
+        console.log(rentaGravableAlternativa);
+        console.log(rentaGravableAlternativaUVT);
+        console.log(imanUVT * constantes.UVT);
+
+        return imanUVT * constantes.UVT;
     }
 
     /**
@@ -101,7 +118,19 @@ angular.module('myApp.services')
                     - valores.ingresosNoConstitutivosRenta
                     - valores.rentasExentas;
                 // TODO 4.2.1. Tabla tarifas IMAN (333 ET)
+                var impuestoBasicoRentaIman = 0;
 
+                if (rentaGravableAlternativa / constantes.UVT >= 13643) {
+                    impuestoBasicoRentaIman = (rentaGravableAlternativa / constantes.UVT * .27 - 1622) * constantes.UVT;
+                } else if (rentaGravableAlternativa / constantes.UVT < 13643 && rentaGravableAlternativa >= 1548) {
+                    $http.get('../paso1/iman.json').then(function (response) {
+                        var imanTarifas = response.data.tablaIman;
+                        impuestoBasicoRentaIman = calcularTarifaRentaIman(rentaGravableAlternativa, imanTarifas);
+                    });
+                }
+
+                impuestoNetoRenta = (impuestoNetoRenta > impuestoBasicoRentaIman) ?
+                    impuestoNetoRenta : impuestoBasicoRentaIman;
             }
 
             if (false) {

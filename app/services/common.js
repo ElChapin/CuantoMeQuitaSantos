@@ -5,6 +5,7 @@ angular.module('myApp.services', [])
 
     /**
      * Data una tabla de tarifa con la esctrutura:
+
      * [
      *  {bordeUVT: 10, tarifa: .1, constanteUVT: 1},
      *  {bordeUVT: 20, tarifa: .2, constanteUVT: 2}
@@ -14,7 +15,6 @@ angular.module('myApp.services', [])
     service.ObtenerTarifaDiferencial = function (baseGravable, tablaTarifa) {
 
         var baseGravableUVT = baseGravable / constantes.UVT;
-
         var retencionUVT = 0;
 
         for (var i = tablaTarifa.length - 1; i >= 0 && retencionUVT == 0; i--) {
