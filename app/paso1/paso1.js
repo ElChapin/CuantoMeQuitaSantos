@@ -9,7 +9,7 @@ angular.module('myApp.paso1', ['ngRoute'])
   });
 }])
 
-.controller('Paso1Ctrl', function($scope, retefuenteService, rentaService, constantes) {
+.controller('Paso1Ctrl', function($scope, retefuenteService, rentaService, combustiblesService , constantes) {
 
   $scope.paso2visible = false;
 
@@ -227,9 +227,10 @@ angular.module('myApp.paso1', ['ngRoute'])
     //Indirectos
 
     //Gasolina
-    var gasolina = $scope.entradas.encuentasConsumo.transporte == 'carro' ? calcularImpuestosGasolinaCarro(conReforma)
-        : $scope.entradas.encuentasConsumo.transporte == 'moto' ? calcularImpuestosGasolinaMoto(conReforma)
-        : 0;
+    var gasolina = $scope.entradas.encuentasConsumo.transporte == 'carro' ? combustiblesService.CalcularImpuestosGasolinaCarro(conReforma)
+        : $scope.entradas.encuentasConsumo.transporte == 'moto' ? combustiblesService.CalcularImpuestosGasolinaMoto(conReforma)
+        : combustiblesService.CalcularImpuestosBus(conReforma);
+
     flujoEfectivoMensual -= gasolina.impuestos;
 
     //Femeninos
@@ -386,30 +387,6 @@ angular.module('myApp.paso1', ['ngRoute'])
         flujoAnual: flujoEfectivoAnual,
         CanastaBasica: conReforma ? 121350 : 117750
     }
-  }
-
-  var calcularImpuestosGasolinaCarro = function (conReforma) {
-
-      return calcularImpuestosGasolina(30, conReforma)
-  }
-
-  var calcularImpuestosGasolinaMoto = function (conReforma) {
-
-      return calcularImpuestosGasolina(80, conReforma)
-  }
-
-  var calcularImpuestosGasolina = function (rendimientoKmsGalon, conReforma) {
-
-      var promedioKmsDia = 20;
-      var precioReferencia = 8046;//Bogota, nocimebre
-      var impuestoNacional = 1116;
-      var sobretasa = 1168;
-      var impuestoVerde = 135;
-
-      var consumoMes = (promedioKmsDia / rendimientoKmsGalon) * 30;
-      var totalImpuestos = (impuestoNacional + sobretasa + (conReforma ? 135 : 0)) * consumoMes;
-
-      return { impuestos: totalImpuestos, total: precioReferencia * consumoMes + totalImpuestos }
   }
 
   function calcularIVAMercadoReforma()
