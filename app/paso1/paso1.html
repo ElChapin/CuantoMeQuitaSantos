@@ -5,9 +5,9 @@
 </md-toolbar>
 <md-content md-theme="docs-dark" layout-gt-sm="row" layout-padding layout-align="center center">
   <div>
-    <md-input-container>
+    <md-input-container class="big-input">
       <label>Salario</label>
-      <input ng-model="entradas.salario" ui-money-mask="0" ng-focus="limpiarSalario()" ng-blur="resetSalario()" placeholder="¿Cuánto ganas al mes?" class="big-input">
+      <input ng-model="entradas.salario" ui-money-mask="0" ng-focus="limpiarSalario()" ng-blur="resetSalario()" placeholder="¿Cuánto ganas al mes?">
     </md-input-container>
 
     <md-input-container>
@@ -24,18 +24,20 @@
         ¿Es salario integral?
       </md-switch>
     </md-input-container>
-    <md-switch ng-model="entradas.encuentasConsumo.carro" aria-label="¿Tienes carro?" class="md-primary">
-      ¿Tienes carro? <i class="material-icons">directions_car</i>
-    </md-switch>
-    <md-switch ng-model="entradas.encuentasConsumo.moto" aria-label="¿Tienes moto?" class="md-primary">
-      ¿Tienes moto? <i class="material-icons">directions_bike</i>
-    </md-switch>
   </div>
 </md-content>
 <md-content layout-gt-sm="row" layout-padding layout-align="center center">
-  <div flex="33">Sexo</div>
-  <img flex="33" src="img/female.svg" ng-class="{'selected':entradas.sexo == 'f'}" ng-click="entradas.sexo = 'f'" class="icon-radio">
-  <img flex="33" src="img/male.svg" ng-class="{'selected': entradas.sexo == 'm'}" ng-click="entradas.sexo = 'm'" class="icon-radio">
+  <label>Medio de transporte</label>
+  <md-radio-group ng-model="entradas.encuentasConsumo.transporte" layout="row">
+    <md-radio-button value="carro"><i class="material-icons">directions_car</i> Carro</md-radio-button>
+    <md-radio-button value="moto"><i class="material-icons">directions_bike</i> Moto</md-radio-button>
+    <md-radio-button value="bus"><i class="material-icons">directions_bus</i> Bus</md-radio-button>
+  </md-radio-group>
+</md-content>
+<md-content layout-gt-sm="row" layout-padding layout-align="center center">
+  <label>Sexo</label>
+  <img src="img/female.svg" ng-class="{'selected':entradas.sexo == 'f'}" ng-click="entradas.sexo = 'f'" class="icon-radio">
+  <img src="img/male.svg" ng-class="{'selected': entradas.sexo == 'm'}" ng-click="entradas.sexo = 'm'" class="icon-radio">
 </md-content>
 <section layout="column" layout-wrap>
   <md-button ng-click="paso2()" ng-href="#paso2" du-smooth-scroll type="button" class="md-raised md-warn">¡Empezar!</md-button>

@@ -31,8 +31,7 @@ angular.module('myApp.paso1', ['ngRoute'])
     sexo: 'f',
     tipoContrato: $scope.tiposContrato[0].id,
     encuentasConsumo: {
-        carro: true,
-        moto: false
+        transporte: 'carro'
     }
   }
 
@@ -228,7 +227,9 @@ angular.module('myApp.paso1', ['ngRoute'])
     //Indirectos
 
     //Gasolina
-    var gasolina = $scope.entradas.encuentasConsumo.carro ? calcularImpuestosGasolinaCarro(conReforma) : $scope.entradas.encuentasConsumo.moto ? calcularImpuestosGasolinaMoto(conReforma) : 0
+    var gasolina = $scope.entradas.encuentasConsumo.transporte == 'carro' ? calcularImpuestosGasolinaCarro(conReforma)
+        : $scope.entradas.encuentasConsumo.transporte == 'moto' ? calcularImpuestosGasolinaMoto(conReforma)
+        : 0;
     flujoEfectivoMensual -= gasolina.impuestos;
 
     //Femeninos

@@ -39,7 +39,14 @@ body{ background: #EDECEC; padding:50px}*/
 }
 
 .big-input {
-    font-size: 25px;
+
+    input {
+        font-size: 25px;
+    }
+
+    .md-errors-spacer {
+        float: none;
+    }
 }
 
 .images-grid img {
