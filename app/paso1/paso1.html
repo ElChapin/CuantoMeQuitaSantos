@@ -28,12 +28,10 @@
 </md-content>
 <div layout-xs="column" layout="row" layout-align="center" yout-fill layout-padding>
   <md-card class="enter" layout-xs="column" layout="row" layout-align="center center" yout-fill layout-padding>
-    <div>
-      <label>Sexo</label>
-      <div layout="row">
-        <img src="img/female.svg" ng-class="{'selected':entradas.sexo == 'f'}" ng-click="entradas.sexo = 'f'" class="icon-radio">
-        <img src="img/male.svg" ng-class="{'selected': entradas.sexo == 'm'}" ng-click="entradas.sexo = 'm'" class="icon-radio">
-      </div>
+    <label>Sexo</label>
+    <div layout="row">
+      <img src="img/female.svg" ng-class="{'selected':entradas.sexo == 'f'}" ng-click="entradas.sexo = 'f'" class="icon-radio">
+      <img src="img/male.svg" ng-class="{'selected': entradas.sexo == 'm'}" ng-click="entradas.sexo = 'm'" class="icon-radio">
     </div>
     <md-switch ng-if="entradas.sexo == 'f'" ng-model="entradas.adicionalesMenstruacion" aria-label="¿Usas protectores y pañitos?">
       ¿Prods. Cuidado íntimo?
@@ -42,7 +40,7 @@
       ¿Usas maquillaje?
     </md-switch>
   </md-card>
-  <md-card class="enter" layout-padding>
+  <md-card class="enter" layout-xs="column" layout="row" layout-align="center center" yout-fill layout-padding>
     <label>Medio de transporte</label>
     <md-radio-group ng-model="entradas.encuentasConsumo.transporte" layout="row">
       <md-radio-button value="carro"><i class="material-icons">directions_car</i> Carro</md-radio-button>
