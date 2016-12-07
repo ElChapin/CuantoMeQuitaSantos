@@ -66,7 +66,7 @@
           </md-card-avatar>
         <md-card-header-text>
           <span class="md-title">Cada mes</span>
-          <span class="md-subhead">Después de impuestos</span>
+          <span class="md-subhead">Reforma 2014 vs. Reforma 2016</span>
         </md-card-header-text>
       </md-card-header> 
       <div>
@@ -77,6 +77,7 @@
       <div>
         <label>Retefuente</label>
         <variacion valor-actual="actual.retefuente" valor-reforma="reforma.retefuente" layout="row"></variacion>
+        <md-tooltip md-direction="left">Se calculó una base gravable de {{baseGravableRetefuente | plata}}</md-tooltip>
       </div>   
       <div>
         <label>Impuesto gasolina *</label>
@@ -115,10 +116,12 @@
       <div>
         <label>Retefuente</label>
         <variacion valor-actual="actual.retefuente * 12" valor-reforma="reforma.retefuente * 12" layout="row"></variacion>
+        <md-tooltip md-direction="left">Se calculó una base gravable de {{baseGravableRetefuente | plata}}</md-tooltip>
       </div>
       <div>
         <label>Impuesto de renta</label>
         <variacion valor-actual="actual.renta.impuesto" valor-reforma="reforma.renta.impuesto" layout="row"></variacion>
+        <md-tooltip md-direction="left">Se calculó una base gravable de {{actual.renta.baseGravable | plata}} vs. {{reforma.renta.baseGravable | plata}}</md-tooltip>
       </div>   
       <div>
         <label>Impuesto gasolina</label>
