@@ -81,11 +81,12 @@
       <div>
         <label>Impuesto gasolina *</label>
         <variacion valor-actual="actual.indirectos.gasolina.impuestos" valor-reforma="reforma.indirectos.gasolina.impuestos" layout="row"></variacion>
-        <md-tooltip md-direction="left">Incluye impuesto nacional y sobretasa a los combustibles, y el nuevo impuesto al carbono</md-tooltip>
+        <md-tooltip md-direction="left">Incluye impuesto nacional y sobretasa a los combustibles, y el nuevo impuesto al carbono. Se suponen desplazamientos de 10 km/día para quienes usan carro o moto, y de 2 trayectos/día para buses</md-tooltip>
       </div>   
       <div>
         <label>IVA prod. femeninos</label>
         <variacion valor-actual="actual.indirectos.productosFemeninos.iva" valor-reforma="reforma.indirectos.productosFemeninos.iva" layout="row"></variacion>
+        <md-tooltip md-direction="left">Incluye IVA de toallas higiénicas (25/mes), protectores (30/mes), pañitos (1 paquete/mes) y maquillaje (7 usd/mes<sup>1</sup>)</md-tooltip>
       </div> 
       <div>
         <label>IVA Canasta básica</label>
@@ -109,6 +110,7 @@
       <div>
         <label>Seguridad Social</label>
         <variacion valor-actual="actual.pagosSeguridadSocial * 12" valor-reforma="reforma.pagosSeguridadSocial * 12" layout="row"></variacion>
+        <md-tooltip md-direction="left">Pagos de salud y pensiones a cargo del empleado</md-tooltip>
       </div>        
       <div>
         <label>Retefuente</label>
@@ -121,11 +123,13 @@
       <div>
         <label>Impuesto gasolina</label>
         <variacion valor-actual="actual.indirectos.gasolina.impuestos * 12" valor-reforma="reforma.indirectos.gasolina.impuestos * 12" layout="row"></variacion>
+        <md-tooltip md-direction="left">Incluye impuesto nacional y sobretasa a los combustibles, y el nuevo impuesto al carbono. Se suponen desplazamientos de 10 km/día para quienes usan carro o moto, y de 2 trayectos/día para buses</md-tooltip>
       </div>    
       <div>
         <label>IVA prod. femeninos</label>
         <!--Son 13 periodos de menstruación al año-->
         <variacion valor-actual="actual.indirectos.productosFemeninos.iva * 13" valor-reforma="reforma.indirectos.productosFemeninos.iva * 13" layout="row"></variacion>
+        <md-tooltip md-direction="left">Incluye IVA de toallas higiénicas (325/año, 13 periodos), protectores (360/año), pañitos (12 paquete/año) y maquillaje (84 usd/mes<sup>1</sup>)</md-tooltip>
       </div> 
       <div>
         <label>IVA Canasta básica</label>
@@ -138,3 +142,6 @@
     </md-card>
   </div>
 </md-content>
+<div layout-padding>
+  <small>1. Cifras de 2013 de el Consejo de Asociaciones de la Industria Cosmética Latinoamericana (CASIC). Tomado de http://www.portafolio.co/economia/finanzas/mujeres-recortan-gastos-maquillaje-87654</small>
+</div>
