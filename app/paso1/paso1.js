@@ -237,7 +237,7 @@ angular.module('myApp.paso1', ['ngRoute'])
     var consumoProductosFemeninos = 0;
 
     if ($scope.entradas.sexo == 'f')
-        consumoProductosFemeninos = 95000;
+        consumoProductosFemeninos = 15625;
         
     var ivaProductosFemeninos = consumoProductosFemeninos * (conReforma ? .19 : .16);
     var productosFemeninos = {
