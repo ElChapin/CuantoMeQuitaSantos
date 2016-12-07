@@ -9,13 +9,13 @@ angular.module('myApp.paso1', ['ngRoute'])
   });
 }])
 
-.controller('Paso1Ctrl', function($scope, retefuenteService, rentaService, combustiblesService , constantes) {
+.controller('Paso1Ctrl', function($scope, $timeout, $document, retefuenteService, rentaService, combustiblesService , constantes) {
 
   $scope.paso2visible = false;
 
   $scope.paso2 = function () {
 
-      $scope.paso2visible = true;
+    $scope.paso2visible = true;
   }
 
   $scope.salarioMinimo = constantes.salarioMinimo;

@@ -3,7 +3,7 @@
     <h2 class="md-flex">¡Vamos a jugar! ¿Cuánto me gano?</h2>
   </div>
 </md-toolbar>
-<md-content md-theme="docs-dark" layout-gt-sm="row" layout-padding layout-align="center center">
+<md-content md-theme="docs-dark" layout-gt-sm="row" layout-align="center center" layout-padding>
   <div>
     <md-input-container class="big-input">
       <label>Salario</label>
@@ -26,8 +26,8 @@
     </md-input-container>
   </div>
 </md-content>
-<div layout-xs="column" layout-sm="column" layout="row" layout-align="center" yout-fill layout-padding>
-  <md-card class="enter" layout-xs="column" layout-sm="column" layout="row" layout-align="center center" yout-fill layout-padding>
+<div layout-xs="column" layout-sm="column" layout="row" layout-align="center" layout-padding>
+  <md-card class="enter" layout-xs="column" layout-sm="column" layout="row" layout-align="center center" layout-padding>
     <label>Sexo</label>
     <div layout="row">
       <img src="img/female.svg" ng-class="{'selected':entradas.sexo == 'f'}" ng-click="entradas.sexo = 'f'" class="icon-radio">
@@ -40,7 +40,7 @@
       ¿Usas maquillaje?
     </md-switch>
   </md-card>
-  <md-card class="enter" layout-xs="column" layout="row" layout-align="center center" yout-fill layout-padding>
+  <md-card class="enter" layout-xs="column" layout="row" layout-align="center center" layout-padding>
     <label>Medio de transporte</label>
     <md-radio-group ng-model="entradas.encuentasConsumo.transporte" layout="row">
       <md-radio-button value="carro"><i class="material-icons">directions_car</i> Carro</md-radio-button>
@@ -56,95 +56,93 @@
   <div class="md-toolbar-tools">
     <h2 class="md-flex">Lo que me quitan y lo que me queda</h2>
   </div>
-</md-toolbar>
-<md-content class="md-padding" ng-if="paso2visible">  
-  <div class="result" layout-xs="column" layout="row" layout-align="center" yout-fill>
-    <md-card class="result" layout-xs="column" flex="grow">     
-      <md-card-header>
-        <md-card-avatar>
-            <img src="img/results.svg"/>
-          </md-card-avatar>
-        <md-card-header-text>
-          <span class="md-title">Cada mes</span>
-          <span class="md-subhead">Reforma 2014 vs. Reforma 2016</span>
-        </md-card-header-text>
-      </md-card-header> 
-      <div>
-        <label>Seguridad Social *</label>
-        <variacion valor-actual="actual.pagosSeguridadSocial" valor-reforma="reforma.pagosSeguridadSocial" layout="row"></variacion>
-        <md-tooltip md-direction="left">Pagos de salud y pensiones a cargo del empleado</md-tooltip>
-      </div>        
-      <div>
-        <label>Retefuente</label>
-        <variacion valor-actual="actual.retefuente" valor-reforma="reforma.retefuente" layout="row"></variacion>
-        <md-tooltip md-direction="left">Se calculó una base gravable de {{baseGravableRetefuente | plata}} ({{baseGravableRetefuente | UVT}})</md-tooltip>
-      </div>   
-      <div>
-        <label>Impuesto gasolina *</label>
-        <variacion valor-actual="actual.indirectos.gasolina.impuestos" valor-reforma="reforma.indirectos.gasolina.impuestos" layout="row"></variacion>
-        <md-tooltip md-direction="left">Incluye impuesto nacional y sobretasa a los combustibles, y el nuevo impuesto al carbono. Se suponen desplazamientos de 10 km/día para quienes usan carro o moto, y de 2 trayectos/día para buses</md-tooltip>
-      </div>   
-      <div>
-        <label>IVA prod. femeninos</label>
-        <variacion valor-actual="actual.indirectos.productosFemeninos.iva" valor-reforma="reforma.indirectos.productosFemeninos.iva" layout="row"></variacion>
-        <md-tooltip md-direction="left">Incluye IVA de toallas higiénicas (25/mes), protectores (30/mes), pañitos (1 paquete/mes) y maquillaje (7 usd/mes<sup>1</sup>)</md-tooltip>
-      </div> 
-      <div>
-        <label>IVA Canasta básica</label>
-        <variacion valor-actual="actual.canastaBasica.iva" valor-reforma="reforma.canastaBasica.iva" layout="row"></variacion>
-      </div>   
-      <div class="total">
-        <label>Me quedan</label>
-        <variacion valor-actual="actual.flujoMensual" valor-reforma="reforma.flujoMensual" ingreso="true" layout="row"></variacion>
-      </div>
-    </md-card>
-    <md-card class="result" layout-xs="column" flex="grow">
-      <md-card-header>
-        <md-card-avatar>
-            <img src="img/results.svg"/>
-          </md-card-avatar>
-        <md-card-header-text>
-          <span class="md-title">Cada año</span>
-          <span class="md-subhead">De pronto así lo dimensiones mejor</span>
-        </md-card-header-text>
-      </md-card-header> 
-      <div>
-        <label>Seguridad Social</label>
-        <variacion valor-actual="actual.pagosSeguridadSocial * 12" valor-reforma="reforma.pagosSeguridadSocial * 12" layout="row"></variacion>
-        <md-tooltip md-direction="left">Pagos de salud y pensiones a cargo del empleado</md-tooltip>
-      </div>        
-      <div>
-        <label>Retefuente</label>
-        <variacion valor-actual="actual.retefuente * 12" valor-reforma="reforma.retefuente * 12" layout="row"></variacion>
-        <md-tooltip md-direction="left">Se calculó una base gravable mensual de {{baseGravableRetefuente | plata}} ({{baseGravableRetefuente | UVT}})</md-tooltip>
-      </div>
-      <div>
-        <label>Impuesto de renta</label>
-        <variacion valor-actual="actual.renta.impuesto" valor-reforma="reforma.renta.impuesto" layout="row"></variacion>
-        <md-tooltip md-direction="left">Se calculó una base gravable de {{actual.renta.baseGravable | plata}} ({{actual.renta.baseGravable | UVT}}) vs. {{reforma.renta.baseGravable | plata}} ({{reforma.renta.baseGravable | UVT}})</md-tooltip>
-      </div>   
-      <div>
-        <label>Impuesto gasolina</label>
-        <variacion valor-actual="actual.indirectos.gasolina.impuestos * 12" valor-reforma="reforma.indirectos.gasolina.impuestos * 12" layout="row"></variacion>
-        <md-tooltip md-direction="left">Incluye impuesto nacional y sobretasa a los combustibles, y el nuevo impuesto al carbono. Se suponen desplazamientos de 10 km/día para quienes usan carro o moto, y de 2 trayectos/día para buses</md-tooltip>
-      </div>    
-      <div>
-        <label>IVA prod. femeninos</label>
-        <!--Son 13 periodos de menstruación al año-->
-        <variacion valor-actual="actual.indirectos.productosFemeninos.iva * 13" valor-reforma="reforma.indirectos.productosFemeninos.iva * 13" layout="row"></variacion>
-        <md-tooltip md-direction="left">Incluye IVA de toallas higiénicas (325/año, 13 periodos), protectores (360/año), pañitos (12 paquete/año) y maquillaje (84 usd/mes<sup>1</sup>)</md-tooltip>
-      </div> 
-      <div>
-        <label>IVA Canasta básica</label>
-        <variacion valor-actual="actual.canastaBasica.iva * 12" valor-reforma="reforma.canastaBasica.iva * 12" layout="row"></variacion>
-      </div>   
-      <div class="total">
-        <label>Me quedan</label>
-        <variacion valor-actual="actual.flujoAnual" valor-reforma="reforma.flujoAnual" ingreso="true" layout="row"></variacion>
-      </div>
-    </md-card>
-  </div>
-</md-content>
+</md-toolbar>  
+<div ng-if="paso2visible" class="result" layout-xs="column" layout="row" layout-align="center" layout-padding>
+  <md-card class="result" layout-xs="column">     
+    <md-card-header>
+      <md-card-avatar>
+        <img src="img/results.svg"/>
+      </md-card-avatar>
+      <md-card-header-text>
+        <span class="md-title">Cada mes</span>
+        <span class="md-subhead">Reforma 2014 vs. Reforma 2016</span>
+      </md-card-header-text>
+    </md-card-header> 
+    <div>
+      <label>Seguridad Social *</label>
+      <variacion valor-actual="actual.pagosSeguridadSocial" valor-reforma="reforma.pagosSeguridadSocial" layout="row"></variacion>
+      <md-tooltip md-direction="left">Pagos de salud y pensiones a cargo del empleado</md-tooltip>
+    </div>        
+    <div>
+      <label>Retefuente</label>
+      <variacion valor-actual="actual.retefuente" valor-reforma="reforma.retefuente" layout="row"></variacion>
+      <md-tooltip md-direction="left">Se calculó una base gravable de {{baseGravableRetefuente | plata}} ({{baseGravableRetefuente | UVT}})</md-tooltip>
+    </div>   
+    <div>
+      <label>Impuesto gasolina *</label>
+      <variacion valor-actual="actual.indirectos.gasolina.impuestos" valor-reforma="reforma.indirectos.gasolina.impuestos" layout="row"></variacion>
+      <md-tooltip md-direction="left">Incluye impuesto nacional y sobretasa a los combustibles, y el nuevo impuesto al carbono. Se suponen desplazamientos de 10 km/día para quienes usan carro o moto, y de 2 trayectos/día para buses</md-tooltip>
+    </div>   
+    <div>
+      <label>IVA prod. femeninos</label>
+      <variacion valor-actual="actual.indirectos.productosFemeninos.iva" valor-reforma="reforma.indirectos.productosFemeninos.iva" layout="row"></variacion>
+      <md-tooltip md-direction="left">Incluye IVA de toallas higiénicas (25/mes), protectores (30/mes), pañitos (1 paquete/mes) y maquillaje (7 usd/mes<sup>1</sup>)</md-tooltip>
+    </div> 
+    <div>
+      <label>IVA Canasta básica</label>
+      <variacion valor-actual="actual.canastaBasica.iva" valor-reforma="reforma.canastaBasica.iva" layout="row"></variacion>
+    </div>   
+    <div class="total">
+      <label>Me quedan</label>
+      <variacion valor-actual="actual.flujoMensual" valor-reforma="reforma.flujoMensual" ingreso="true" layout="row"></variacion>
+    </div>
+  </md-card>
+  <md-card class="result" layout-xs="column">
+    <md-card-header>
+      <md-card-avatar>
+        <img src="img/results.svg"/>
+      </md-card-avatar>
+      <md-card-header-text>
+        <span class="md-title">Cada año</span>
+        <span class="md-subhead">De pronto así lo dimensiones mejor</span>
+      </md-card-header-text>
+    </md-card-header> 
+    <div>
+      <label>Seguridad Social</label>
+      <variacion valor-actual="actual.pagosSeguridadSocial * 12" valor-reforma="reforma.pagosSeguridadSocial * 12" layout="row"></variacion>
+      <md-tooltip md-direction="left">Pagos de salud y pensiones a cargo del empleado</md-tooltip>
+    </div>        
+    <div>
+      <label>Retefuente</label>
+      <variacion valor-actual="actual.retefuente * 12" valor-reforma="reforma.retefuente * 12" layout="row"></variacion>
+      <md-tooltip md-direction="left">Se calculó una base gravable mensual de {{baseGravableRetefuente | plata}} ({{baseGravableRetefuente | UVT}})</md-tooltip>
+    </div>
+    <div>
+      <label>Impuesto de renta</label>
+      <variacion valor-actual="actual.renta.impuesto" valor-reforma="reforma.renta.impuesto" layout="row"></variacion>
+      <md-tooltip md-direction="left">Se calculó una base gravable de {{actual.renta.baseGravable | plata}} ({{actual.renta.baseGravable | UVT}}) vs. {{reforma.renta.baseGravable | plata}} ({{reforma.renta.baseGravable | UVT}})</md-tooltip>
+    </div>   
+    <div>
+      <label>Impuesto gasolina</label>
+      <variacion valor-actual="actual.indirectos.gasolina.impuestos * 12" valor-reforma="reforma.indirectos.gasolina.impuestos * 12" layout="row"></variacion>
+      <md-tooltip md-direction="left">Incluye impuesto nacional y sobretasa a los combustibles, y el nuevo impuesto al carbono. Se suponen desplazamientos de 10 km/día para quienes usan carro o moto, y de 2 trayectos/día para buses</md-tooltip>
+    </div>    
+    <div>
+      <label>IVA prod. femeninos</label>
+      <!--Son 13 periodos de menstruación al año-->
+      <variacion valor-actual="actual.indirectos.productosFemeninos.iva * 13" valor-reforma="reforma.indirectos.productosFemeninos.iva * 13" layout="row"></variacion>
+      <md-tooltip md-direction="left">Incluye IVA de toallas higiénicas (325/año, 13 periodos), protectores (360/año), pañitos (12 paquete/año) y maquillaje (84 usd/mes<sup>1</sup>)</md-tooltip>
+    </div> 
+    <div>
+      <label>IVA Canasta básica</label>
+      <variacion valor-actual="actual.canastaBasica.iva * 12" valor-reforma="reforma.canastaBasica.iva * 12" layout="row"></variacion>
+    </div>   
+    <div class="total">
+      <label>Me quedan</label>
+      <variacion valor-actual="actual.flujoAnual" valor-reforma="reforma.flujoAnual" ingreso="true" layout="row"></variacion>
+    </div>
+  </md-card>
+</div>
 <div layout-padding>
   <small>1. Cifras de 2013 de el Consejo de Asociaciones de la Industria Cosmética Latinoamericana (CASIC). Tomado de http://www.portafolio.co/economia/finanzas/mujeres-recortan-gastos-maquillaje-87654</small>
 </div>
