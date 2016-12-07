@@ -77,7 +77,7 @@
       <div>
         <label>Retefuente</label>
         <variacion valor-actual="actual.retefuente" valor-reforma="reforma.retefuente" layout="row"></variacion>
-        <md-tooltip md-direction="left">Se calculó una base gravable de {{baseGravableRetefuente | plata}}</md-tooltip>
+        <md-tooltip md-direction="left">Se calculó una base gravable de {{baseGravableRetefuente | plata}} ({{baseGravableRetefuente | UVT}})</md-tooltip>
       </div>   
       <div>
         <label>Impuesto gasolina *</label>
@@ -116,12 +116,12 @@
       <div>
         <label>Retefuente</label>
         <variacion valor-actual="actual.retefuente * 12" valor-reforma="reforma.retefuente * 12" layout="row"></variacion>
-        <md-tooltip md-direction="left">Se calculó una base gravable de {{baseGravableRetefuente | plata}}</md-tooltip>
+        <md-tooltip md-direction="left">Se calculó una base gravable mensual de {{baseGravableRetefuente | plata}} ({{baseGravableRetefuente | UVT}})</md-tooltip>
       </div>
       <div>
         <label>Impuesto de renta</label>
         <variacion valor-actual="actual.renta.impuesto" valor-reforma="reforma.renta.impuesto" layout="row"></variacion>
-        <md-tooltip md-direction="left">Se calculó una base gravable de {{actual.renta.baseGravable | plata}} vs. {{reforma.renta.baseGravable | plata}}</md-tooltip>
+        <md-tooltip md-direction="left">Se calculó una base gravable de {{actual.renta.baseGravable | plata}} ({{actual.renta.baseGravable | UVT}}) vs. {{reforma.renta.baseGravable | plata}} ({{reforma.renta.baseGravable | UVT}})</md-tooltip>
       </div>   
       <div>
         <label>Impuesto gasolina</label>

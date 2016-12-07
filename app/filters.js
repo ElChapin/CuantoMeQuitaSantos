@@ -4,7 +4,7 @@ angular.module('myApp.filters', [])
         return Math.abs(val);
     }
 })
-.filter('plata', function ( $filter) {
+.filter('plata', function ($filter) {
     return function (number) {
 
         if (number < 1000000) {
@@ -15,5 +15,11 @@ angular.module('myApp.filters', [])
             return '1 Millón';
         
         return $filter('number')((number / 1000000), 2) + ' Millones';
+    }
+})
+.filter('UVT', function ($filter, constantes) {
+    return function (number) {
+        
+        return $filter('number')((number / constantes.UVT), 0) + ' UVTs';
     }
 });
