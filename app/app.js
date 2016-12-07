@@ -20,7 +20,7 @@ config(['$locationProvider', '$routeProvider', '$mdThemingProvider', '$mdIconPro
   $mdThemingProvider.theme('default')
       .primaryPalette('yellow')
       .warnPalette('deep-purple', {'default': '500'})
-      .accentPalette('deep-purple');
+      .accentPalette('brown');
 
   $mdThemingProvider.theme('docs-dark')
       .primaryPalette('yellow')

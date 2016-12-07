@@ -29,12 +29,12 @@ body{ background: #EDECEC; padding:50px}*/
     height: 80px;
     cursor: pointer;
     border-radius: 50%;
-    background: rgba(0,0,0,.05);
+    background: rgba(0,0,0,.04);
 
   &:focus {outline:0;}
 
   &.selected {
-      background: rgba(255,235,59,.6);
+      background: rgb(188,170,164);
   }
 }
 
