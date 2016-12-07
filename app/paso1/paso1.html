@@ -43,7 +43,7 @@
     </div>
   </md-content>
   <md-switch ng-if="entradas.sexo == 'f'" ng-model="entradas.adicionalesMenstruacion" aria-label="¿Usas protectores y pañitos?" class="md-primary">
-    ¿Usas protectores y pañitos?
+    ¿Prods. Cuidado íntimo?
   </md-switch>
   <md-switch ng-if="entradas.sexo == 'f'" ng-model="entradas.maquillaje" aria-label="¿Usas maquillaje?" class="md-primary">
     ¿Usas maquillaje?
@@ -70,16 +70,18 @@
         </md-card-header-text>
       </md-card-header> 
       <div>
-        <label>Seguridad Social</label>
+        <label>Seguridad Social *</label>
         <variacion valor-actual="actual.pagosSeguridadSocial" valor-reforma="reforma.pagosSeguridadSocial" layout="row"></variacion>
+        <md-tooltip md-direction="left">Pagos de salud y pensiones a cargo del empleado</md-tooltip>
       </div>        
       <div>
         <label>Retefuente</label>
         <variacion valor-actual="actual.retefuente" valor-reforma="reforma.retefuente" layout="row"></variacion>
       </div>   
       <div>
-        <label>Impuesto gasolina</label>
+        <label>Impuesto gasolina *</label>
         <variacion valor-actual="actual.indirectos.gasolina.impuestos" valor-reforma="reforma.indirectos.gasolina.impuestos" layout="row"></variacion>
+        <md-tooltip md-direction="left">Incluye impuesto nacional y sobretasa a los combustibles, y el nuevo impuesto al carbono</md-tooltip>
       </div>   
       <div>
         <label>IVA prod. femeninos</label>
@@ -112,10 +114,10 @@
         <label>Retefuente</label>
         <variacion valor-actual="actual.retefuente * 12" valor-reforma="reforma.retefuente * 12" layout="row"></variacion>
       </div>
-      <!--<div>
+      <div>
         <label>Impuesto de renta</label>
         <variacion valor-actual="actual.renta.impuesto" valor-reforma="reforma.renta.impuesto" layout="row"></variacion>
-      </div>-->     
+      </div>   
       <div>
         <label>Impuesto gasolina</label>
         <variacion valor-actual="actual.indirectos.gasolina.impuestos * 12" valor-reforma="reforma.indirectos.gasolina.impuestos * 12" layout="row"></variacion>

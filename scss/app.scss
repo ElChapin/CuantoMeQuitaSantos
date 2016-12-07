@@ -84,8 +84,20 @@ body{ background: #EDECEC; padding:50px}*/
 
         label {
             font-size: 75%;
+
+            .material-icons {
+                font-size: 75%;
+            }
         }
     }
+}
+
+md-tooltip .md-content {
+    white-space: initial;
+    height: auto;
+    line-height: 16px;
+    font-size: 90%;
+    padding: 5px 8px;
 }
 
 .material-icons {

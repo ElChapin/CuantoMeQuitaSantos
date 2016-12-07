@@ -222,8 +222,15 @@ angular.module('myApp.paso1', ['ngRoute'])
     //25% del subtotal 4 Limitadas a 240 uvt (7.140.480 AÑO 2016), Art.206 Numeral 10. El cálculo de esta renta exenta se efectuará una vez se detraiga del valor total de los pagos laborales recibidos por el trabajador, los ingresos no constitutivos de renta, las deducciones y las demás rentas exentas diferentes a la establecida en el presente numeral
     var rentaExcentaTrabajo = subtotal * .25 / constantes.UVT > 240 ? 240 * constantes.UVT : subtotal * .25;
     $scope.baseGravableRetefuente = subtotal - rentaExcentaTrabajo;
-    var retefuente = conReforma ? retefuenteService.CalcularRetencionReforma($scope.baseGravableRetefuente) : retefuenteService.CalcularRetencionActual($scope.baseGravableRetefuente);
     
+    //Retefuente
+    var retefuente = retefuenteService.CalcularRetencionActual($scope.baseGravableRetefuente);
+    
+    var retefuenteAnoAnterior = retefuente;
+    
+    if (conReforma)
+        retefuente = retefuenteService.CalcularRetencionReforma($scope.baseGravableRetefuente);
+
     flujoEfectivoMensual -= retefuente;
 
     //Indirectos
@@ -320,7 +327,11 @@ angular.module('myApp.paso1', ['ngRoute'])
     }
 
     var renta = conReforma ? rentaService.CalcularRentaReforma(valoresCedula) : rentaService.CalcularRentaActual(valoresRenta);
-    flujoEfectivoAnual -= renta.impuesto;
+
+    //Se resta los pagos de retefuente del año anterior
+    var valorAPagarRenta = renta.impuesto - retefuenteAnoAnterior * 12;
+
+    flujoEfectivoAnual -= valorAPagarRenta;
 
     return {
         pagosSeguridadSocial: aporteObligatorioSalud +aporteObligatorioPension + aporteFSP,
@@ -338,6 +349,8 @@ angular.module('myApp.paso1', ['ngRoute'])
 
   var calculoPrestacion = function (conReforma) {
 
+    //TODO
+
     var aporteObligatorioSalud = 0;
     var aporteObligatorioPension = 0;
     var aporteFSP = 0;
@@ -354,6 +367,8 @@ angular.module('myApp.paso1', ['ngRoute'])
     var rentasExentas = 0;
 
     var retefuente = ($scope.entradas.salario - ingresosNoConstitutivosRenta - deducciones - rentasExentas) * .1;
+    
+    var retefuenteAnoAnterior = retefuente;
 
     if (conReforma)
         retefuente = $scope.entradas.salario * .15;
@@ -396,7 +411,11 @@ angular.module('myApp.paso1', ['ngRoute'])
     }
 
     var renta = conReforma ? rentaService.CalcularRentaReforma(valoresCedula) : rentaService.CalcularRentaActual(valoresRenta);
-    flujoEfectivoAnual -= renta.impuesto;
+
+    //Se resta los pagos de retefuente del año anterior
+    var valorAPagarRenta = renta.impuesto - retefuenteAnoAnterior * 12;
+
+    flujoEfectivoAnual -= valorAPagarRenta;
 
     return {
         pagosSeguridadSocial: aporteObligatorioSalud +aporteObligatorioPension + aporteFSP,
