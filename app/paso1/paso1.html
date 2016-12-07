@@ -26,180 +26,113 @@
     </md-input-container>
   </div>
 </md-content>
-<md-content layout-gt-sm="row" layout-padding layout-align="center center">
-  <label>Medio de transporte</label>
-  <md-radio-group ng-model="entradas.encuentasConsumo.transporte" layout="row">
-    <md-radio-button value="carro"><i class="material-icons">directions_car</i> Carro</md-radio-button>
-    <md-radio-button value="moto"><i class="material-icons">directions_bike</i> Moto</md-radio-button>
-    <md-radio-button value="bus"><i class="material-icons">directions_bus</i> Bus</md-radio-button>
-  </md-radio-group>
-</md-content>
-<md-content layout-gt-sm="row" layout-padding layout-align="center center">
-  <label>Sexo</label>
-  <img src="img/female.svg" ng-class="{'selected':entradas.sexo == 'f'}" ng-click="entradas.sexo = 'f'" class="icon-radio">
-  <img src="img/male.svg" ng-class="{'selected': entradas.sexo == 'm'}" ng-click="entradas.sexo = 'm'" class="icon-radio">
-</md-content>
-<section layout="column" layout-wrap>
-  <md-button ng-click="paso2()" ng-href="#paso2" du-smooth-scroll type="button" class="md-raised md-warn">¡Empezar!</md-button>
+<div layout-xs="column" layout="row" layout-align="center center" yout-fill>
+  <md-content class="enter" layout-padding>
+    <label>Medio de transporte</label>
+    <md-radio-group ng-model="entradas.encuentasConsumo.transporte" layout="row">
+      <md-radio-button value="carro"><i class="material-icons">directions_car</i> Carro</md-radio-button>
+      <md-radio-button value="moto"><i class="material-icons">directions_bike</i> Moto</md-radio-button>
+      <md-radio-button value="bus"><i class="material-icons">directions_bus</i> Bus</md-radio-button>
+    </md-radio-group>
+  </md-content>
+  <md-content class="enter" layout-padding>
+    <label>Sexo</label>
+    <div layout="row">
+      <img src="img/female.svg" ng-class="{'selected':entradas.sexo == 'f'}" ng-click="entradas.sexo = 'f'" class="icon-radio">
+      <img src="img/male.svg" ng-class="{'selected': entradas.sexo == 'm'}" ng-click="entradas.sexo = 'm'" class="icon-radio">
+    </div>
+  </md-content>
+  <md-switch ng-if="entradas.sexo == 'f'" ng-model="entradas.adicionalesMenstruacion" aria-label="¿Usas protectores y pañitos?" class="md-primary">
+    ¿Usas protectores y pañitos?
+  </md-switch>
+  <md-switch ng-if="entradas.sexo == 'f'" ng-model="entradas.maquillaje" aria-label="¿Usas maquillaje?" class="md-primary">
+    ¿Usas maquillaje?
+  </md-switch>
+</div>
+<section layout="row" layout-align="center center" ng-if="!paso2visible">
+  <md-button ng-click="paso2()" ng-href="#paso2" du-smooth-scroll type="button" class="md-raised md-warn md-padding">¡Empezar!</md-button>
 </section>
 <md-toolbar id="paso2" class="md-primary" ng-if="paso2visible">
   <div class="md-toolbar-tools">
     <h2 class="md-flex">Lo que me quitan y lo que me queda</h2>
   </div>
 </md-toolbar>
-<md-content class="md-padding" ng-if="paso2visible">
-  <md-tabs class="md-warn" md-dynamic-height md-border-bottom>
-    <md-tab label="Cada mes">      
-      <label class="col-md-2 control-label">Base gravable retefuente</label>
-      <div class="col-md-10">
-        {{baseGravableRetefuente | currency:"$ ":0}}
+<md-content class="md-padding" ng-if="paso2visible">  
+  <div class="result" layout-xs="column" layout="row" layout-align="start start" yout-fill>
+    <md-card class="result" layout-xs="column" flex="grow">     
+      <md-card-header>
+        <md-card-avatar>
+            <img src="img/results.svg"/>
+          </md-card-avatar>
+        <md-card-header-text>
+          <span class="md-title">Cada mes</span>
+          <span class="md-subhead">Después de impuestos</span>
+        </md-card-header-text>
+      </md-card-header> 
+      <div>
+        <label>Seguridad Social</label>
+        <variacion valor-actual="actual.pagosSeguridadSocial" valor-reforma="reforma.pagosSeguridadSocial" layout="row"></variacion>
+      </div>        
+      <div>
+        <label>Retefuente</label>
+        <variacion valor-actual="actual.retefuente" valor-reforma="reforma.retefuente" layout="row"></variacion>
+      </div>   
+      <div>
+        <label>Impuesto gasolina</label>
+        <variacion valor-actual="actual.indirectos.gasolina.impuestos" valor-reforma="reforma.indirectos.gasolina.impuestos" layout="row"></variacion>
+      </div>   
+      <div>
+        <label>IVA prod. femeninos</label>
+        <variacion valor-actual="actual.indirectos.productosFemeninos.iva" valor-reforma="reforma.indirectos.productosFemeninos.iva" layout="row"></variacion>
+      </div> 
+      <div>
+        <label>IVA Canasta básica</label>
+        <variacion valor-actual="actual.canastaBasica.iva" valor-reforma="reforma.canastaBasica.iva" layout="row"></variacion>
+      </div>   
+      <div class="total">
+        <label>Me quedan</label>
+        <variacion valor-actual="actual.flujoMensual" valor-reforma="reforma.flujoMensual" ingreso="true" layout="row"></variacion>
       </div>
-      <div class="row">
-        <div class="col-md-6">
-          <table class="table">
-            <tr>
-              <th colspan="2">Actualmente</th>
-            </tr>
-            <tr class="warning">
-              <td>Pagos seguridad social</td>
-              <td>{{actual.pagosSeguridadSocial | currency:"$ ":0}}</td>
-            </tr>
-            <tr class="danger">
-              <td>Retefuente</td>
-              <td><strong>{{actual.retefuente | currency:"$ ":0}}</strong></td>
-            </tr>
-            <tr class="danger">
-              <td>Impuestos gasolina</td>
-              <td><strong>{{actual.indirectos.gasolina.impuestos | currency:"$ ":0}}</strong></td>
-            </tr>
-            <tr class="danger">
-              <td>Impuestos prod. femeninos</td>
-              <td><strong>{{actual.indirectos.productosFemeninos.iva | currency:"$ ":0}}</strong></td>
-            </tr>
-            <!--<tr>
-              <td>Canasta básica</td>
-              <td>{{actual.CanastaBasica | currency:"$ ":0}}</td>
-            </tr>-->
-            <tr class="success">
-              <td>Me quedan</td>
-              <td><strong>{{actual.flujoMensual | currency:"$ ":0}}</strong></td>
-            </tr>
-          </table>
-        </div>
-        <div class="col-md-6">
-          <table class="table">
-            <tr>
-              <th colspan="2">Con La Reforma</th>
-            </tr>
-            <tr class="warning">
-              <td>Pagos seguridad social</td>
-              <td>{{reforma.pagosSeguridadSocial | currency:"$ ":0}}</td>
-            </tr>
-            <tr class="danger">
-              <td>Retefuente</td>
-              <td><strong>{{reforma.retefuente | currency:"$ ":0}}</strong></td>
-            </tr>
-            <tr class="danger">
-              <td>Impuestos gasolina</td>
-              <td><strong>{{reforma.indirectos.gasolina.impuestos | currency:"$ ":0}}</strong></td>
-            </tr>
-            <tr class="danger">
-              <td>Impuestos prod. femeninos</td>
-              <td><strong>{{reforma.indirectos.productosFemeninos.iva | currency:"$ ":0}}</strong></td>
-            </tr>
-            <!--<tr>
-              <td>Canasta básica</td>
-              <td>{{reforma.CanastaBasica | currency:"$ ":0}}</td>
-            </tr>-->
-            <tr class="success">
-              <td>Me quedan</td>
-              <td><strong>{{reforma.flujoMensual | currency:"$ ":0}}</strong></td>
-            </tr>
-          </table>
-        </div>
+    </md-card>
+    <md-card class="result" layout-xs="column" flex="grow">
+      <md-card-header>
+        <md-card-avatar>
+            <img src="img/results.svg"/>
+          </md-card-avatar>
+        <md-card-header-text>
+          <span class="md-title">Cada año</span>
+          <span class="md-subhead">De pronto así lo dimensiones mejor</span>
+        </md-card-header-text>
+      </md-card-header> 
+      <div>
+        <label>Seguridad Social</label>
+        <variacion valor-actual="actual.pagosSeguridadSocial * 12" valor-reforma="reforma.pagosSeguridadSocial * 12" layout="row"></variacion>
+      </div>        
+      <div>
+        <label>Retefuente</label>
+        <variacion valor-actual="actual.retefuente * 12" valor-reforma="reforma.retefuente * 12" layout="row"></variacion>
       </div>
-    </md-tab>
-    <md-tab label="Cada año">
-      <div class="row">
-        <div class="col-md-6">
-          <table class="table">
-            <tr>
-              <th colspan="2">Actualmente</th>
-            </tr>
-            <tr class="warning">
-              <td>Pagos seguridad social</td>
-              <td>{{actual.pagosSeguridadSocial * 12 | currency:"$ ":0}}</td>
-            </tr>
-            <tr class="danger">
-              <td>Retefuente</td>
-              <td><strong>{{actual.retefuente * 12 | currency:"$ ":0}}</strong></td>
-            </tr>
-            <tr class="danger">
-              <td>Base gravable renta</td>
-              <td>{{actual.renta.baseGravable > 0 ? actual.renta.baseGravable : 0  | currency:"$ ":0}}</td>
-            </tr>
-            <tr class="danger">
-              <td>Impuesto de renta</td>
-              <td><strong>{{actual.renta.impuesto > 0 ? actual.renta.impuesto : 0 | currency:"$ ":0}}</strong></td>
-            </tr>
-            <tr class="danger">
-              <td>Impuestos gasolina</td>
-              <td><strong>{{actual.indirectos.gasolina.impuestos * 12 | currency:"$ ":0}}</strong></td>
-            </tr>
-            <tr class="danger">
-              <td>Impuestos prod. femeninos</td>
-              <td><strong>{{actual.indirectos.productosFemeninos.iva * 12 | currency:"$ ":0}}</strong></td>
-            </tr>
-            <!--<tr>
-              <td>Canasta básica</td>
-              <td>{{actual.CanastaBasica | currency:"$ ":0}}</td>
-            </tr>-->
-            <tr class="success">
-              <td>Me quedan</td>
-              <td><strong>{{actual.flujoAnual | currency:"$ ":0}}</strong></td>
-            </tr>
-          </table>
-        </div>
-        <div class="col-md-6">
-          <table class="table">
-            <tr>
-              <th colspan="2">Con La Reforma</th>
-            </tr>
-            <tr class="warning">
-              <td>Pagos seguridad social</td>
-              <td>{{reforma.pagosSeguridadSocial * 12 | currency:"$ ":0}}</td>
-            </tr>
-            <tr class="danger">
-              <td>Retefuente</td>
-              <td><strong>{{reforma.retefuente * 12 | currency:"$ ":0}}</strong></td>
-            </tr>
-            <tr class="danger">
-              <td>Base gravable renta</td>
-              <td>{{reforma.renta.baseGravable > 0 ? reforma.renta.baseGravable : 0  | currency:"$ ":0}}</td>
-            </tr>
-            <tr class="danger">
-              <td>Impuesto de renta</td>
-              <td><strong>{{reforma.renta.impuesto > 0 ? reforma.renta.impuesto : 0  | currency:"$ ":0}}</strong></td>
-            </tr>
-            <tr class="danger">
-              <td>Impuestos gasolina</td>
-              <td><strong>{{reforma.indirectos.gasolina.impuestos * 12 | currency:"$ ":0}}</strong></td>
-            </tr>
-            <tr class="danger">
-              <td>Impuestos prod. femeninos</td>
-              <td><strong>{{reforma.indirectos.productosFemeninos.iva * 12 | currency:"$ ":0}}</strong></td>
-            </tr>
-            <!--<tr>
-              <td>Canasta básica</td>
-              <td>{{reforma.CanastaBasica | currency:"$ ":0}}</td>
-            </tr>-->
-            <tr class="success">
-              <td>Me quedan</td>
-              <td><strong>{{reforma.flujoAnual | currency:"$ ":0}}</strong></td>
-            </tr>
-          </table>
-        </div>
+      <!--<div>
+        <label>Impuesto de renta</label>
+        <variacion valor-actual="actual.renta.impuesto" valor-reforma="reforma.renta.impuesto" layout="row"></variacion>
+      </div>-->     
+      <div>
+        <label>Impuesto gasolina</label>
+        <variacion valor-actual="actual.indirectos.gasolina.impuestos * 12" valor-reforma="reforma.indirectos.gasolina.impuestos * 12" layout="row"></variacion>
+      </div>    
+      <div>
+        <label>IVA prod. femeninos</label>
+        <!--Son 13 periodos de menstruación al año-->
+        <variacion valor-actual="actual.indirectos.productosFemeninos.iva * 13" valor-reforma="reforma.indirectos.productosFemeninos.iva * 13" layout="row"></variacion>
+      </div> 
+      <div>
+        <label>IVA Canasta básica</label>
+        <variacion valor-actual="actual.canastaBasica.iva * 12" valor-reforma="reforma.canastaBasica.iva * 12" layout="row"></variacion>
+      </div>   
+      <div class="total">
+        <label>Me quedan</label>
+        <variacion valor-actual="actual.flujoAnual" valor-reforma="reforma.flujoAnual" ingreso="true" layout="row"></variacion>
       </div>
-    </md-tab>
-  </md-tabs>
+    </md-card>
+  </div>
 </md-content>

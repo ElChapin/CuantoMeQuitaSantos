@@ -23,7 +23,7 @@ body{ background: #EDECEC; padding:50px}*/
 }
 
 .icon-radio {
-    margin: 10px;
+    margin: 0 10px 0 0;
     padding: 0;
     width: 80px;
     height: 80px;
@@ -44,7 +44,7 @@ body{ background: #EDECEC; padding:50px}*/
         font-size: 25px;
     }
 
-    .md-errors-spacer {
+    .errors-spacer {
         float: none;
     }
 }
@@ -55,4 +55,64 @@ body{ background: #EDECEC; padding:50px}*/
 
 .text-centered {
     text-align: center;
+}
+
+.enter {
+
+    label {
+        font-size: 75%;
+    }
+}
+
+.result {
+
+    > div {
+        background: white;
+        margin: 0 8px;
+        border-bottom: 1px solid #f1f1f1;
+
+        &.total {
+            font-size: 110%;
+            color: #ef473a;
+            padding: 4px 0;
+        }
+
+        p {
+            margin: 0;
+            line-height: 22px;
+        }
+
+        label {
+            font-size: 75%;
+        }
+    }
+}
+
+.material-icons {
+    
+    &.positive {
+        color: #33cd5f;
+    }
+    
+    &.negative {
+        color: #ef473a;
+    }
+}
+
+variacion {
+    vertical-align: middle;
+
+    p {
+
+        > * {
+            vertical-align: middle;
+        }
+    }
+}
+
+.md-input-container {
+
+    .md-errors-spacer { 
+        float: none;
+    }
 }

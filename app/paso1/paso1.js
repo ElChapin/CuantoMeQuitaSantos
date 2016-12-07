@@ -28,11 +28,13 @@ angular.module('myApp.paso1', ['ngRoute'])
   ]
 
   $scope.entradas = {
-    sexo: 'f',
     tipoContrato: $scope.tiposContrato[0].id,
     encuentasConsumo: {
         transporte: 'carro'
-    }
+    },
+    sexo: 'f',
+    adicionalesMenstruacion: true,
+    maquillaje: true
   }
 
   $scope.limpiarSalario = function () {
@@ -236,15 +238,32 @@ angular.module('myApp.paso1', ['ngRoute'])
     //Femeninos
     var consumoProductosFemeninos = 0;
 
-    if ($scope.entradas.sexo == 'f')
-        consumoProductosFemeninos = 15625;
+    if ($scope.entradas.sexo == 'f') {
         
-    var ivaProductosFemeninos = consumoProductosFemeninos * (conReforma ? .19 : .16);
-    var productosFemeninos = {
-        total: consumoProductosFemeninos + ivaProductosFemeninos,
-        iva: ivaProductosFemeninos
+        consumoProductosFemeninos = 15625;
+
+        if ($scope.entradas.adicionalesMenstruacion)
+            consumoProductosFemeninos += 20000;
+
+        if ($scope.entradas.maquillaje)
+            consumoProductosFemeninos += 21273;
     }
+        
+    var consumoToallasHigiénicas = consumoProductosFemeninos * (conReforma ? .19 : .16);
+
+    var productosFemeninos = {
+        total: consumoProductosFemeninos + consumoToallasHigiénicas,
+        iva: consumoToallasHigiénicas
+    }
+    
     flujoEfectivoMensual -= productosFemeninos.iva;
+
+    //Canasta básica
+    var canastaBasica = { 
+        iva: conReforma ? 22374 : 18842,
+        total: conReforma ? 121293 : 117760
+    }
+    flujoEfectivoMensual -= canastaBasica.iva;
     
     //5. Flujo efectivo anual
     //=El flujo mensual, y si no es salario integral un salario de prima + 12% de intereses sobre cesantías (como son un salario, se suma 1.12 veces el salario)
@@ -313,7 +332,7 @@ angular.module('myApp.paso1', ['ngRoute'])
         renta: renta,
         flujoMensual: flujoEfectivoMensual,
         flujoAnual: flujoEfectivoAnual,
-        CanastaBasica: conReforma ? 121350 : 117750
+        canastaBasica: canastaBasica
     }
   }
 
@@ -385,7 +404,7 @@ angular.module('myApp.paso1', ['ngRoute'])
         renta: renta,
         flujoMensual: flujoEfectivoMensual,
         flujoAnual: flujoEfectivoAnual,
-        CanastaBasica: conReforma ? 121350 : 117750
+        CanastaBasica: conReforma ? 18842 : 22374
     }
   }
 

@@ -6,6 +6,8 @@ angular.module('myApp', [
   'ui.utils.masks',
   'duScroll',
   'ngMaterial',
+  'myApp.filters',
+  'myApp.directives',
   'myApp.services',
   'myApp.paso1',
   'myApp.version'
