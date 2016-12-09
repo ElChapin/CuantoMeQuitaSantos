@@ -26,27 +26,40 @@
     </md-input-container>
   </div>
 </md-content>
-<div layout-xs="column" layout-sm="column" layout="row" layout-align="center" layout-padding>
-  <md-card class="enter" layout-xs="column" layout-sm="column" layout="row" layout-align="center center" layout-padding>
-    <label>Sexo</label>
-    <div layout="row">
+<div layout="column" layout-gt-md="row" layout-align="center" layout-padding>
+  <md-card flex class="enter" layout="column" layout-md="row" layout-lg="row" layout-align="center center" layout-padding>
+    <label flex>Sexo</label>
+    <div flex layout="row">
       <img src="img/female.svg" ng-class="{'selected':entradas.sexo == 'f'}" ng-click="entradas.sexo = 'f'" class="icon-radio">
       <img src="img/male.svg" ng-class="{'selected': entradas.sexo == 'm'}" ng-click="entradas.sexo = 'm'" class="icon-radio">
     </div>
-    <md-switch ng-if="entradas.sexo == 'f'" ng-model="entradas.adicionalesMenstruacion" aria-label="¿Usas protectores y pañitos?">
-      ¿Prods. Cuidado íntimo?
-    </md-switch>
-    <md-switch ng-if="entradas.sexo == 'f'" ng-model="entradas.maquillaje" aria-label="¿Usas maquillaje?">
+    <md-switch flex ng-if="entradas.sexo == 'f'" ng-model="entradas.maquillaje" aria-label="¿Usas maquillaje?">
       ¿Usas maquillaje?
     </md-switch>
+    <md-switch flex ng-if="entradas.sexo == 'f'" ng-model="entradas.adicionalesMenstruacion" aria-label="¿Usas protectores y pañitos?">
+      ¿Prods. Cuidado íntimo?
+    </md-switch>
   </md-card>
-  <md-card class="enter" layout-xs="column" layout="row" layout-align="center center" layout-padding>
+  <md-card flex class="enter" layout-xs="column" layout-sm="column" layout="row" layout-align="center center" layout-padding>
     <label>Medio de transporte</label>
-    <md-radio-group ng-model="entradas.encuentasConsumo.transporte" layout="row">
+    <md-radio-group ng-model="entradas.encuentaConsumo.transporte" layout="row">
       <md-radio-button value="carro"><i class="material-icons">directions_car</i> Carro</md-radio-button>
       <md-radio-button value="moto"><i class="material-icons">directions_bike</i> Moto</md-radio-button>
       <md-radio-button value="bus"><i class="material-icons">directions_bus</i> Bus</md-radio-button>
+      <md-radio-button value="otro"><i class="material-icons">directions_run</i> Otro</md-radio-button>
     </md-radio-group>
+  </md-card>
+  <md-card flex class="enter" layout-xs="column" layout="row" layout-align="center center" layout-padding>
+      <label flex>Productos fuera de la canasta básica</label>
+      <md-switch flex ng-model="entradas.encuentaConsumo.desodorante" aria-label="Desodorante">
+        Desodorante
+      </md-switch>
+      <md-switch flex ng-model="entradas.encuentaConsumo.desodorantePies" aria-label="Desodorante pies">
+        Desodorante pies
+      </md-switch>
+      <md-switch flex ng-model="entradas.encuentaConsumo.lecheDeSoya" aria-label="Leche de soya">
+        Leche de soya
+      </md-switch>
   </md-card>
 </div>
 <section layout="row" layout-align="center center" ng-if="!paso2visible">
@@ -86,12 +99,17 @@
     <div>
       <label>IVA prod. femeninos</label>
       <variacion valor-actual="actual.indirectos.productosFemeninos.iva" valor-reforma="reforma.indirectos.productosFemeninos.iva" layout="row"></variacion>
-      <md-tooltip md-direction="left">Incluye IVA de toallas higiénicas (25/mes), protectores (30/mes), pañitos (1 paquete/mes) y maquillaje (7 usd/mes<sup>1</sup>)</md-tooltip>
+      <md-tooltip md-direction="left">Incluye IVA de toallas higiénicas (25/mes), protectores (30/mes), pañitos (1 paquete/mes), jabón íntimo (1/mes) y maquillaje (7 usd/mes<sup>1</sup>)</md-tooltip>
     </div> 
     <div>
       <label>IVA Canasta básica</label>
       <variacion valor-actual="actual.canastaBasica.iva" valor-reforma="reforma.canastaBasica.iva" layout="row"></variacion>
-    </div>   
+    </div>  
+    <div>
+      <label>IVA Consumo adicional</label>
+      <variacion valor-actual="actual.productosFueraCanasta.iva" valor-reforma="reforma.productosFueraCanasta.iva" layout="row"></variacion>
+      <md-tooltip md-direction="left">Nota la diferencia para hombres y mujeres en estos productos, a estos e le llama "Impuesto rosa"</md-tooltip>
+    </div>  
     <div class="total">
       <label>Me quedan</label>
       <variacion valor-actual="actual.flujoMensual" valor-reforma="reforma.flujoMensual" ingreso="true" layout="row"></variacion>
@@ -116,11 +134,6 @@
       <label>Retefuente</label>
       <variacion valor-actual="actual.retefuente * 12" valor-reforma="reforma.retefuente * 12" layout="row"></variacion>
       <md-tooltip md-direction="left">Se calculó una base gravable mensual de {{baseGravableRetefuente | plata}} ({{baseGravableRetefuente | UVT}})</md-tooltip>
-    </div>
-    <div>
-      <label>Impuesto de renta</label>
-      <variacion valor-actual="actual.renta.impuesto" valor-reforma="reforma.renta.impuesto" layout="row"></variacion>
-      <md-tooltip md-direction="left">Se calculó una base gravable de {{actual.renta.baseGravable | plata}} ({{actual.renta.baseGravable | UVT}}) vs. {{reforma.renta.baseGravable | plata}} ({{reforma.renta.baseGravable | UVT}})</md-tooltip>
     </div>   
     <div>
       <label>Impuesto gasolina</label>
@@ -131,12 +144,22 @@
       <label>IVA prod. femeninos</label>
       <!--Son 13 periodos de menstruación al año-->
       <variacion valor-actual="actual.indirectos.productosFemeninos.iva * 13" valor-reforma="reforma.indirectos.productosFemeninos.iva * 13" layout="row"></variacion>
-      <md-tooltip md-direction="left">Incluye IVA de toallas higiénicas (325/año, 13 periodos), protectores (360/año), pañitos (12 paquete/año) y maquillaje (84 usd/mes<sup>1</sup>)</md-tooltip>
+      <md-tooltip md-direction="left">Incluye IVA de toallas higiénicas (325/año, 13 periodos), protectores (360/año), pañitos (12 paquete/año), jabón íntimo (12/año) y maquillaje (84 usd/mes<sup>1</sup>)</md-tooltip>
     </div> 
     <div>
       <label>IVA Canasta básica</label>
       <variacion valor-actual="actual.canastaBasica.iva * 12" valor-reforma="reforma.canastaBasica.iva * 12" layout="row"></variacion>
-    </div>   
+    </div>
+    <div>
+      <label>IVA Consumo adicional</label>
+      <variacion valor-actual="actual.productosFueraCanasta.iva * 12" valor-reforma="reforma.productosFueraCanasta.iva * 12" layout="row"></variacion>
+      <md-tooltip md-direction="left">Nota la diferencia para hombres y mujeres en estos productos, a estos e le llama "Impuesto rosa"</md-tooltip>
+    </div>  
+    <div>
+      <label>Impuesto de renta</label>
+      <variacion valor-actual="actual.renta.impuesto" valor-reforma="reforma.renta.impuesto" layout="row"></variacion>
+      <md-tooltip md-direction="left">Se calculó una base gravable de {{actual.renta.baseGravable | plata}} ({{actual.renta.baseGravable | UVT}}) vs. {{reforma.renta.baseGravable | plata}} ({{reforma.renta.baseGravable | UVT}})</md-tooltip>
+    </div> 
     <div class="total">
       <label>Me quedan</label>
       <variacion valor-actual="actual.flujoAnual" valor-reforma="reforma.flujoAnual" ingreso="true" layout="row"></variacion>

@@ -29,8 +29,11 @@ angular.module('myApp.paso1', ['ngRoute'])
 
   $scope.entradas = {
     tipoContrato: $scope.tiposContrato[0].id,
-    encuentasConsumo: {
-        transporte: 'carro'
+    encuentaConsumo: {
+        transporte: 'carro',
+        desodorante: true,
+        desodorantePies: true,
+        lecheDeSoya: true
     },
     sexo: 'f',
     adicionalesMenstruacion: true,
@@ -236,9 +239,9 @@ angular.module('myApp.paso1', ['ngRoute'])
     //Indirectos
 
     //Gasolina
-    var gasolina = $scope.entradas.encuentasConsumo.transporte == 'carro' ? combustiblesService.CalcularImpuestosGasolinaCarro(conReforma)
-        : $scope.entradas.encuentasConsumo.transporte == 'moto' ? combustiblesService.CalcularImpuestosGasolinaMoto(conReforma)
-        : combustiblesService.CalcularImpuestosBus(conReforma);
+    var gasolina = $scope.entradas.encuentaConsumo.transporte == 'carro' ? combustiblesService.CalcularImpuestosGasolinaCarro(conReforma)
+        : $scope.entradas.encuentaConsumo.transporte == 'moto' ? combustiblesService.CalcularImpuestosGasolinaMoto(conReforma)
+        : $scope.entradas.encuentaConsumo.transporte == 'bus' ? combustiblesService.CalcularImpuestosBus(conReforma) : 0;
 
     flujoEfectivoMensual -= gasolina.impuestos;
 
@@ -249,18 +252,20 @@ angular.module('myApp.paso1', ['ngRoute'])
         
         consumoProductosFemeninos = 15625;
 
+        //Toallas y protectores, promedio de exito.com
+        //Jabón íntimo, promedio de http://sostenibilidad.semana.com/impacto/articulo/ser-mujer-cuesta-economicamente-mas-hombre/33040
         if ($scope.entradas.adicionalesMenstruacion)
-            consumoProductosFemeninos += 20000;
+            consumoProductosFemeninos += 41500;
 
         if ($scope.entradas.maquillaje)
             consumoProductosFemeninos += 21273;
     }
         
-    var consumoToallasHigiénicas = consumoProductosFemeninos * (conReforma ? .19 : .16);
+    var ivaProductosFemeninos = consumoProductosFemeninos * (conReforma ? .19 : .16);
 
     var productosFemeninos = {
-        total: consumoProductosFemeninos + consumoToallasHigiénicas,
-        iva: consumoToallasHigiénicas
+        total: consumoProductosFemeninos + ivaProductosFemeninos,
+        iva: ivaProductosFemeninos
     }
     
     flujoEfectivoMensual -= productosFemeninos.iva;
@@ -271,6 +276,29 @@ angular.module('myApp.paso1', ['ngRoute'])
         total: conReforma ? 121293 : 117760
     }
     flujoEfectivoMensual -= canastaBasica.iva;
+
+    //Productos fuera de la canasta básica
+    var consumoFueraCanasta = 0;
+
+    //http://caracol.com.co/radio/2016/07/22/nacional/1469209755_009764.html
+    if ($scope.entradas.encuentaConsumo.desodorante)
+        consumoFueraCanasta += $scope.entradas.sexo == 'f' ? 16700 : 14500;
+    
+    //http://cedetrabajo.org/blog/2016/01/26/politica-fiscal-y-genero-que-no-se-descargue-la-crisis-sobre-las-mujeres/
+    if ($scope.entradas.encuentaConsumo.desodorantePies)
+        consumoFueraCanasta += $scope.entradas.sexo == 'f' ? 14200 : 12800;
+    //http://cedetrabajo.org/blog/2016/01/26/politica-fiscal-y-genero-que-no-se-descargue-la-crisis-sobre-las-mujeres/
+    if ($scope.entradas.encuentaConsumo.lecheDeSoya)
+        consumoFueraCanasta += $scope.entradas.sexo == 'f' ? 10800 : 9000;
+        
+    var ivaProductosFueraCanasta = consumoFueraCanasta * (conReforma ? .19 : .16);
+
+    var productosFueraCanasta = {
+        total: consumoFueraCanasta + ivaProductosFueraCanasta,
+        iva: ivaProductosFueraCanasta
+    }
+    
+    flujoEfectivoMensual -= consumoFueraCanasta.iva;
     
     //5. Flujo efectivo anual
     //=El flujo mensual, y si no es salario integral un salario de prima + 12% de intereses sobre cesantías (como son un salario, se suma 1.12 veces el salario)
@@ -343,7 +371,8 @@ angular.module('myApp.paso1', ['ngRoute'])
         renta: renta,
         flujoMensual: flujoEfectivoMensual,
         flujoAnual: flujoEfectivoAnual,
-        canastaBasica: canastaBasica
+        canastaBasica: canastaBasica,
+        productosFueraCanasta: productosFueraCanasta
     }
   }
 
