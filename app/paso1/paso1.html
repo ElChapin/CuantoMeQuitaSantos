@@ -27,7 +27,7 @@
   </div>
 </md-content>
 <div layout="column" layout-gt-md="row" layout-align="center" layout-padding>
-  <md-card flex class="enter" layout="column" layout-md="row" layout-lg="row" layout-align="center center" layout-padding>
+  <md-card flex class="enter" layout="column" layout-gt-lg="row" layout-align="center center" layout-padding>
     <label flex>Sexo</label>
     <div flex layout="row">
       <img src="img/female.svg" ng-class="{'selected':entradas.sexo == 'f'}" ng-click="entradas.sexo = 'f'" class="icon-radio">
@@ -40,7 +40,7 @@
       ¿Prods. Cuidado íntimo?
     </md-switch>
   </md-card>
-  <md-card flex class="enter" layout-xs="column" layout-sm="column" layout="row" layout-align="center center" layout-padding>
+  <md-card flex class="enter" layout="column" layout-gt-lg="row" layout-align="center center" layout-padding>
     <label>Medio de transporte</label>
     <md-radio-group ng-model="entradas.encuentaConsumo.transporte" layout="row">
       <md-radio-button value="carro"><i class="material-icons">directions_car</i> Carro</md-radio-button>
@@ -49,7 +49,7 @@
       <md-radio-button value="otro"><i class="material-icons">directions_run</i> Otro</md-radio-button>
     </md-radio-group>
   </md-card>
-  <md-card flex class="enter" layout-xs="column" layout="row" layout-align="center center" layout-padding>
+  <md-card flex class="enter" layout="column" layout-gt-lg="row" layout-align="center center" layout-padding>
       <label flex>Productos fuera de la canasta básica</label>
       <md-switch flex ng-model="entradas.encuentaConsumo.desodorante" aria-label="Desodorante">
         Desodorante
