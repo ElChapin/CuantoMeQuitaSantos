@@ -62,6 +62,39 @@
       </md-switch>
   </md-card>
 </div>
+<div layout-padding>
+  <md-card flex class="enter" layout="column" layout-padding>
+    <md-switch flex ng-model="entradas.encuentaConsumo.moto.comprar" aria-label="¿Piensas comprar moto?">
+      ¿Piensas comprar moto?
+    </md-switch>    
+    <md-grid-list ng-if="entradas.encuentaConsumo.moto.comprar" md-cols-xs="2" md-cols="4" md-cols-gt-md="8" md-gutter="10" md-row-height="130px">
+      <md-grid-tile>
+        <img src="img/motos/akt-nkd.png" ng-class="{'selected':entradas.encuentaConsumo.moto.modelo == 'akt-nkd'}" ng-click="entradas.encuentaConsumo.moto.modelo = 'akt-nkd'" class="icon-radio big">
+      </md-grid-tile>
+      <md-grid-tile>
+        <img src="img/motos/yamaha-ybr.png" ng-class="{'selected': entradas.encuentaConsumo.moto.modelo == 'yamaha-ybr'}" ng-click="entradas.encuentaConsumo.moto.modelo = 'yamaha-ybr'" class="icon-radio big">
+      </md-grid-tile>
+      <md-grid-tile>
+        <img src="img/motos/yamaha-bws.png" ng-class="{'selected': entradas.encuentaConsumo.moto.modelo == 'yamaha-bws'}" ng-click="entradas.encuentaConsumo.moto.modelo = 'yamaha-bws'" class="icon-radio big">
+      </md-grid-tile>
+      <md-grid-tile>
+        <img src="img/motos/yamaha-fazer2.png" ng-class="{'selected': entradas.encuentaConsumo.moto.modelo == 'yamaha-fazer2'}" ng-click="entradas.encuentaConsumo.moto.modelo = 'yamaha-fazer2'" class="icon-radio big">
+      </md-grid-tile>
+      <md-grid-tile>
+        <img src="img/motos/yamaha-tricity.png" ng-class="{'selected': entradas.encuentaConsumo.moto.modelo == 'yamaha-tricity'}" ng-click="entradas.encuentaConsumo.moto.modelo = 'yamaha-tricity'" class="icon-radio big">
+      </md-grid-tile>
+      <md-grid-tile>
+        <img src="img/motos/yamaha-bolt.png" ng-class="{'selected': entradas.encuentaConsumo.moto.modelo == 'yamaha-bolt'}" ng-click="entradas.encuentaConsumo.moto.modelo = 'yamaha-bolt'" class="icon-radio big">
+      </md-grid-tile>
+      <md-grid-tile>
+        <img src="img/motos/yamaha-tenere1200.png" ng-class="{'selected': entradas.encuentaConsumo.moto.modelo == 'yamaha-tenere1200'}" ng-click="entradas.encuentaConsumo.moto.modelo = 'yamaha-tenere1200'" class="icon-radio big">
+      </md-grid-tile>
+      <md-grid-tile>
+      <img src="img/motos/yamaha-r1m.png" ng-class="{'selected': entradas.encuentaConsumo.moto.modelo == 'yamaha-r1m'}" ng-click="entradas.encuentaConsumo.moto.modelo = 'yamaha-r1m'" class="icon-radio big">
+      </md-grid-tile>
+    </md-grid-list>
+  </md-card>
+</div>
 <section layout="row" layout-align="center center" ng-if="!paso2visible">
   <md-button ng-click="paso2()" ng-href="#paso2" du-smooth-scroll type="button" class="md-raised md-warn md-padding">¡Empezar!</md-button>
 </section>
@@ -100,11 +133,12 @@
       <label>IVA prod. femeninos</label>
       <variacion valor-actual="actual.indirectos.productosFemeninos.iva" valor-reforma="reforma.indirectos.productosFemeninos.iva" layout="row"></variacion>
       <md-tooltip md-direction="left">Incluye IVA de toallas higiénicas (25/mes), protectores (30/mes), pañitos (1 paquete/mes), jabón íntimo (1/mes) y maquillaje (7 usd/mes<sup>1</sup>)</md-tooltip>
-    </div> 
+    </div>  
     <div>
       <label>IVA Canasta básica</label>
-      <variacion valor-actual="actual.canastaBasica.iva" valor-reforma="reforma.canastaBasica.iva" layout="row"></variacion>
-    </div>  
+      <variacion valor-actual="actual.productosFueraCanasta.iva" valor-reforma="reforma.productosFueraCanasta.iva" layout="row"></variacion>
+      <md-tooltip md-direction="left">La motos tendrán IVA de 19% + impuesto al consumo de 8%</md-tooltip>
+    </div> 
     <div>
       <label>IVA Consumo adicional</label>
       <variacion valor-actual="actual.productosFueraCanasta.iva" valor-reforma="reforma.productosFueraCanasta.iva" layout="row"></variacion>
@@ -154,6 +188,10 @@
       <label>IVA Consumo adicional</label>
       <variacion valor-actual="actual.productosFueraCanasta.iva * 12" valor-reforma="reforma.productosFueraCanasta.iva * 12" layout="row"></variacion>
       <md-tooltip md-direction="left">Nota la diferencia para hombres y mujeres en estos productos, a estos e le llama "Impuesto rosa"</md-tooltip>
+    </div>  
+    <div>
+      <label>Impuestos moto</label>
+      <variacion valor-actual="actual.moto.impuesto" valor-reforma="reforma.moto.impuesto" layout="row"></variacion>
     </div>  
     <div>
       <label>Impuesto de renta</label>

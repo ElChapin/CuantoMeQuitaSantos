@@ -31,11 +31,16 @@ body{ background: #EDECEC; padding:50px}*/
     border-radius: 50%;
     background: rgba(0,0,0,.04);
 
-  &:focus {outline:0;}
+    &.big {
+        width: auto;
+        height: 120px;
+    }
 
-  &.selected {
-      background: rgb(188,170,164);
-  }
+    &:focus {outline:0;}
+
+    &.selected {
+        background: rgb(188,170,164);
+    }
 }
 
 .big-input {
@@ -97,6 +102,14 @@ md-tooltip .md-content {
     height: auto;
     line-height: 16px;
     padding: 5px 8px;
+}
+
+.md-toolbar-tools {
+
+    h2 {
+        width: 100%;
+        text-align: center;
+    }
 }
 
 .material-icons {

@@ -33,7 +33,11 @@ angular.module('myApp.paso1', ['ngRoute'])
         transporte: 'carro',
         desodorante: true,
         desodorantePies: true,
-        lecheDeSoya: true
+        lecheDeSoya: true,
+        moto: {
+            comprar: true,
+            modelo: 'yamaha-bws'
+        }
     },
     sexo: 'f',
     adicionalesMenstruacion: true,
@@ -287,6 +291,7 @@ angular.module('myApp.paso1', ['ngRoute'])
     //http://cedetrabajo.org/blog/2016/01/26/politica-fiscal-y-genero-que-no-se-descargue-la-crisis-sobre-las-mujeres/
     if ($scope.entradas.encuentaConsumo.desodorantePies)
         consumoFueraCanasta += $scope.entradas.sexo == 'f' ? 14200 : 12800;
+        
     //http://cedetrabajo.org/blog/2016/01/26/politica-fiscal-y-genero-que-no-se-descargue-la-crisis-sobre-las-mujeres/
     if ($scope.entradas.encuentaConsumo.lecheDeSoya)
         consumoFueraCanasta += $scope.entradas.sexo == 'f' ? 10800 : 9000;
@@ -298,7 +303,52 @@ angular.module('myApp.paso1', ['ngRoute'])
         iva: ivaProductosFueraCanasta
     }
     
-    flujoEfectivoMensual -= consumoFueraCanasta.iva;
+    flujoEfectivoMensual -= productosFueraCanasta.iva;
+
+    //Motos
+    var valorActual = 0;
+
+    switch ($scope.entradas.encuentaConsumo.moto.modelo) {
+        case 'akt-nkd':
+            valorActual = 2950000;
+            break;
+        case 'yamaha-ybr':
+            valorActual = 4800000;
+            break;
+        case 'yamaha-bws':
+            valorActual = 6700000;
+            break;
+        case 'yamaha-fazer2':
+            valorActual = 7100000;
+            break;
+        case 'yamaha-tricity':
+            valorActual = 12990000;
+            break;
+        case 'yamaha-bolt':
+            valorActual = 31990000;
+            break;
+        case 'yamaha-tenere1200':
+            valorActual = 46990000;
+            break;
+        case 'yamaha-r1m':
+            valorActual = 73990000;
+            break;
+    }
+
+    /*var ivaMoto = valorActual * .16;
+
+    var valorSinIVA = valorActual - ivaMoto;
+    
+    var impuestoMoto = conReforma ? ivaMoto * (27/16) : ivaMoto;*/    
+
+    var valorSinIVA = valorActual / 1.16;
+
+    var impuestoMoto = conReforma ? valorSinIVA * .27 : valorActual - valorSinIVA;
+    
+    var moto = {
+        total: valorSinIVA + impuestoMoto,
+        impuesto: impuestoMoto
+    }
     
     //5. Flujo efectivo anual
     //=El flujo mensual, y si no es salario integral un salario de prima + 12% de intereses sobre cesantías (como son un salario, se suma 1.12 veces el salario)
@@ -372,7 +422,8 @@ angular.module('myApp.paso1', ['ngRoute'])
         flujoMensual: flujoEfectivoMensual,
         flujoAnual: flujoEfectivoAnual,
         canastaBasica: canastaBasica,
-        productosFueraCanasta: productosFueraCanasta
+        productosFueraCanasta: productosFueraCanasta,
+        moto: moto
     }
   }
 
