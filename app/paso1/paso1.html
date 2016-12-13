@@ -111,7 +111,7 @@
       </md-card-avatar>
       <md-card-header-text>
         <span class="md-title">Cada mes</span>
-        <span class="md-subhead">Reforma 2014 vs. Reforma 2016</span>
+        <span class="md-subhead">Variación Reforma 2016</span>
       </md-card-header-text>
     </md-card-header> 
     <div>
@@ -137,7 +137,7 @@
     <div>
       <label>IVA Canasta básica</label>
       <variacion valor-actual="actual.productosFueraCanasta.iva" valor-reforma="reforma.productosFueraCanasta.iva" layout="row"></variacion>
-      <md-tooltip md-direction="left">La motos tendrán IVA de 19% + impuesto al consumo de 8%</md-tooltip>
+      <md-tooltip md-direction="left">Ejercicio realizado por justiciatributaria.co con 15 productos de la canasta básica con precio octubre de 2016: jabón para cuerpo (6/mes), crema dental (2/mes), papel higiénico (12/mes), detergente (3 kg/mes), salchichas (1 paquete/mes), aceite de cocina (1 L/mes), spaguetti (2 kg/mes), atún (2 latas/mes), limpia pisos (1 L/mes), ojuelas azucaradas (900 g/mes), chocolate en polvo (400 g/mes), barra de jabón ropa (3/mes), suavizante (2 L/mes), salsa de tomate (600 g/mes) y lava loza (1 L/mes)</md-tooltip>
     </div> 
     <div>
       <label>IVA Consumo adicional</label>
@@ -165,10 +165,10 @@
       <md-tooltip md-direction="left">Pagos de salud y pensiones a cargo del empleado</md-tooltip>
     </div>        
     <div>
-      <label>Retefuente</label>
-      <variacion valor-actual="actual.retefuente * 12" valor-reforma="reforma.retefuente * 12" layout="row"></variacion>
-      <md-tooltip md-direction="left">Se calculó una base gravable mensual de {{baseGravableRetefuente | plata}} ({{baseGravableRetefuente | UVT}})</md-tooltip>
-    </div>   
+      <label>Retefuente + Impuesto de renta</label>
+      <variacion valor-actual="actual.retefuente * 12 + actual.renta.impuesto" valor-reforma="reforma.retefuente * 12 + reforma.renta.impuesto" layout="row"></variacion>
+      <md-tooltip md-direction="left">Para impuesto de renta se calculó una base gravable de {{reforma.renta.baseGravable | plata}} ({{reforma.renta.baseGravable | UVT}}) vs. {{actual.renta.baseGravable | plata}} ({{actual.renta.baseGravable | UVT}}) antes de la reforma</md-tooltip>
+    </div>
     <div>
       <label>Impuesto gasolina</label>
       <variacion valor-actual="actual.indirectos.gasolina.impuestos * 12" valor-reforma="reforma.indirectos.gasolina.impuestos * 12" layout="row"></variacion>
@@ -183,21 +183,18 @@
     <div>
       <label>IVA Canasta básica</label>
       <variacion valor-actual="actual.canastaBasica.iva * 12" valor-reforma="reforma.canastaBasica.iva * 12" layout="row"></variacion>
+      <md-tooltip md-direction="left">Ejercicio realizado por justiciatributaria.co con 15 productos de la canasta básica con precio octubre de 2016: jabón para cuerpo (6/mes), crema dental (2/mes), papel higiénico (12/mes), detergente (3 kg/mes), salchichas (1 paquete/mes), aceite de cocina (1 L/mes), spaguetti (2 kg/mes), atún (2 latas/mes), limpia pisos (1 L/mes), ojuelas azucaradas (900 g/mes), chocolate en polvo (400 g/mes), barra de jabón ropa (3/mes), suavizante (2 L/mes), salsa de tomate (600 g/mes) y lava loza (1 L/mes)</md-tooltip>
     </div>
     <div>
       <label>IVA Consumo adicional</label>
       <variacion valor-actual="actual.productosFueraCanasta.iva * 12" valor-reforma="reforma.productosFueraCanasta.iva * 12" layout="row"></variacion>
       <md-tooltip md-direction="left">Nota la diferencia para hombres y mujeres en estos productos, a estos e le llama "Impuesto rosa"</md-tooltip>
     </div>  
-    <div>
-      <label>Impuestos moto</label>
+    <div ng-if="entradas.encuentaConsumo.moto.comprar">
+      <label>Impuestos compra vehículo</label>
       <variacion valor-actual="actual.moto.impuesto" valor-reforma="reforma.moto.impuesto" layout="row"></variacion>
-    </div>  
-    <div>
-      <label>Impuesto de renta</label>
-      <variacion valor-actual="actual.renta.impuesto" valor-reforma="reforma.renta.impuesto" layout="row"></variacion>
-      <md-tooltip md-direction="left">Se calculó una base gravable de {{actual.renta.baseGravable | plata}} ({{actual.renta.baseGravable | UVT}}) vs. {{reforma.renta.baseGravable | plata}} ({{reforma.renta.baseGravable | UVT}})</md-tooltip>
-    </div> 
+      <md-tooltip md-direction="left">La motos tendrán IVA de 19% + impuesto al consumo de 8%</md-tooltip>
+    </div>
     <div class="total">
       <label>Me quedan</label>
       <variacion valor-actual="actual.flujoAnual" valor-reforma="reforma.flujoAnual" ingreso="true" layout="row"></variacion>

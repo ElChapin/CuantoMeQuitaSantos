@@ -306,47 +306,53 @@ angular.module('myApp.paso1', ['ngRoute'])
     flujoEfectivoMensual -= productosFueraCanasta.iva;
 
     //Motos
-    var valorActual = 0;
+    var motoValorSinIVA = 0;
+    var impuestoMoto = 0;
 
-    switch ($scope.entradas.encuentaConsumo.moto.modelo) {
-        case 'akt-nkd':
-            valorActual = 2950000;
-            break;
-        case 'yamaha-ybr':
-            valorActual = 4800000;
-            break;
-        case 'yamaha-bws':
-            valorActual = 6700000;
-            break;
-        case 'yamaha-fazer2':
-            valorActual = 7100000;
-            break;
-        case 'yamaha-tricity':
-            valorActual = 12990000;
-            break;
-        case 'yamaha-bolt':
-            valorActual = 31990000;
-            break;
-        case 'yamaha-tenere1200':
-            valorActual = 46990000;
-            break;
-        case 'yamaha-r1m':
-            valorActual = 73990000;
-            break;
+    if ($scope.entradas.encuentaConsumo.moto.comprar) {
+
+        var motoValorActual = 0;
+
+        switch ($scope.entradas.encuentaConsumo.moto.modelo) {
+            case 'akt-nkd':
+                motoValorActual = 2950000;
+                break;
+            case 'yamaha-ybr':
+                motoValorActual = 4800000;
+                break;
+            case 'yamaha-bws':
+                motoValorActual = 6700000;
+                break;
+            case 'yamaha-fazer2':
+                motoValorActual = 7100000;
+                break;
+            case 'yamaha-tricity':
+                motoValorActual = 12990000;
+                break;
+            case 'yamaha-bolt':
+                motoValorActual = 31990000;
+                break;
+            case 'yamaha-tenere1200':
+                motoValorActual = 46990000;
+                break;
+            case 'yamaha-r1m':
+                motoValorActual = 73990000;
+                break;
+        }
+
+        /*var ivaMoto = motoValorActual * .16;
+
+        motoValorSinIVA = motoValorActual - ivaMoto;
+        
+        impuestoMoto = conReforma ? ivaMoto * (27/16) : ivaMoto;*/    
+
+        motoValorSinIVA = motoValorActual / 1.16;
+
+        impuestoMoto = conReforma ? motoValorSinIVA * .27 : motoValorActual - motoValorSinIVA;
     }
-
-    /*var ivaMoto = valorActual * .16;
-
-    var valorSinIVA = valorActual - ivaMoto;
-    
-    var impuestoMoto = conReforma ? ivaMoto * (27/16) : ivaMoto;*/    
-
-    var valorSinIVA = valorActual / 1.16;
-
-    var impuestoMoto = conReforma ? valorSinIVA * .27 : valorActual - valorSinIVA;
     
     var moto = {
-        total: valorSinIVA + impuestoMoto,
+        total: motoValorSinIVA + impuestoMoto,
         impuesto: impuestoMoto
     }
     
