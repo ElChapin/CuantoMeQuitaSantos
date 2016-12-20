@@ -9,7 +9,7 @@ angular.module('myApp.paso1', ['ngRoute'])
   });
 }])
 
-.controller('Paso1Ctrl', function($scope, $timeout, $document, retefuenteService, rentaService, combustiblesService , constantes) {
+.controller('Paso1Ctrl', function($scope, $filter, $timeout, $document, retefuenteService, rentaService, combustiblesService , constantes) {
 
   $scope.paso2visible = false;
 
@@ -309,46 +309,30 @@ angular.module('myApp.paso1', ['ngRoute'])
     var motoValorSinIVA = 0;
     var impuestoMoto = 0;
 
+    $scope.motos = [
+        { id: 'akt-nkd', valorActual: 2950000, cc: 125 },
+        { id: 'yamaha-ybr', valorActual: 4800000, cc: 125 },
+        { id: 'yamaha-bws', valorActual: 6700000, cc: 125 },
+        { id: 'yamaha-fazer2', valorActual: 7100000, cc: 125 },
+        { id: 'yamaha-tricity', valorActual: 12990000, cc: 124.8 },
+        { id: 'yamaha-bolt', valorActual: 31990000, cc: 942 },
+        { id: 'yamaha-tenere1200', valorActual: 46990000, cc: 1200 },
+        { id: 'yamaha-r1m', valorActual: 73990000, cc: 998 },
+    ];
+
     if ($scope.entradas.encuentaConsumo.moto.comprar) {
 
-        var motoValorActual = 0;
+        var motoSeleccionada = $filter('filter')($scope.motos, { id: $scope.entradas.encuentaConsumo.moto.modelo }, true);
 
-        switch ($scope.entradas.encuentaConsumo.moto.modelo) {
-            case 'akt-nkd':
-                motoValorActual = 2950000;
-                break;
-            case 'yamaha-ybr':
-                motoValorActual = 4800000;
-                break;
-            case 'yamaha-bws':
-                motoValorActual = 6700000;
-                break;
-            case 'yamaha-fazer2':
-                motoValorActual = 7100000;
-                break;
-            case 'yamaha-tricity':
-                motoValorActual = 12990000;
-                break;
-            case 'yamaha-bolt':
-                motoValorActual = 31990000;
-                break;
-            case 'yamaha-tenere1200':
-                motoValorActual = 46990000;
-                break;
-            case 'yamaha-r1m':
-                motoValorActual = 73990000;
-                break;
-        }
+        /*var ivaMoto = motoSeleccionada[0].valorActual * .16;
 
-        /*var ivaMoto = motoValorActual * .16;
-
-        motoValorSinIVA = motoValorActual - ivaMoto;
+        motoValorSinIVA = motoSeleccionada[0].valorActual - ivaMoto;
         
         impuestoMoto = conReforma ? ivaMoto * (27/16) : ivaMoto;*/    
 
-        motoValorSinIVA = motoValorActual / 1.16;
+        motoValorSinIVA = motoSeleccionada[0].valorActual / (motoSeleccionada[0].cc < 250 ? 1.16 : 1.24);
 
-        impuestoMoto = conReforma ? motoValorSinIVA * .27 : motoValorActual - motoValorSinIVA;
+        impuestoMoto = conReforma ? motoValorSinIVA * .27 : motoSeleccionada[0].valorActual - motoValorSinIVA;
     }
     
     var moto = {
@@ -415,7 +399,9 @@ angular.module('myApp.paso1', ['ngRoute'])
     //Se resta los pagos de retefuente del año anterior
     var valorAPagarRenta = renta.impuesto - retefuenteAnoAnterior * 12;
 
-    flujoEfectivoAnual -= valorAPagarRenta;
+    flujoEfectivoAnual -= valorAPagarRenta;    
+    
+    flujoEfectivoAnual -= moto.impuesto;
 
     return {
         pagosSeguridadSocial: aporteObligatorioSalud +aporteObligatorioPension + aporteFSP,

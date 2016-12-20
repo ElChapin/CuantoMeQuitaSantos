@@ -68,29 +68,8 @@
       ¿Piensas comprar moto?
     </md-switch>    
     <md-grid-list ng-if="entradas.encuentaConsumo.moto.comprar" md-cols-xs="2" md-cols="4" md-cols-gt-md="8" md-gutter="10" md-row-height="130px">
-      <md-grid-tile>
-        <img src="img/motos/akt-nkd.png" ng-class="{'selected':entradas.encuentaConsumo.moto.modelo == 'akt-nkd'}" ng-click="entradas.encuentaConsumo.moto.modelo = 'akt-nkd'" class="icon-radio big">
-      </md-grid-tile>
-      <md-grid-tile>
-        <img src="img/motos/yamaha-ybr.png" ng-class="{'selected': entradas.encuentaConsumo.moto.modelo == 'yamaha-ybr'}" ng-click="entradas.encuentaConsumo.moto.modelo = 'yamaha-ybr'" class="icon-radio big">
-      </md-grid-tile>
-      <md-grid-tile>
-        <img src="img/motos/yamaha-bws.png" ng-class="{'selected': entradas.encuentaConsumo.moto.modelo == 'yamaha-bws'}" ng-click="entradas.encuentaConsumo.moto.modelo = 'yamaha-bws'" class="icon-radio big">
-      </md-grid-tile>
-      <md-grid-tile>
-        <img src="img/motos/yamaha-fazer2.png" ng-class="{'selected': entradas.encuentaConsumo.moto.modelo == 'yamaha-fazer2'}" ng-click="entradas.encuentaConsumo.moto.modelo = 'yamaha-fazer2'" class="icon-radio big">
-      </md-grid-tile>
-      <md-grid-tile>
-        <img src="img/motos/yamaha-tricity.png" ng-class="{'selected': entradas.encuentaConsumo.moto.modelo == 'yamaha-tricity'}" ng-click="entradas.encuentaConsumo.moto.modelo = 'yamaha-tricity'" class="icon-radio big">
-      </md-grid-tile>
-      <md-grid-tile>
-        <img src="img/motos/yamaha-bolt.png" ng-class="{'selected': entradas.encuentaConsumo.moto.modelo == 'yamaha-bolt'}" ng-click="entradas.encuentaConsumo.moto.modelo = 'yamaha-bolt'" class="icon-radio big">
-      </md-grid-tile>
-      <md-grid-tile>
-        <img src="img/motos/yamaha-tenere1200.png" ng-class="{'selected': entradas.encuentaConsumo.moto.modelo == 'yamaha-tenere1200'}" ng-click="entradas.encuentaConsumo.moto.modelo = 'yamaha-tenere1200'" class="icon-radio big">
-      </md-grid-tile>
-      <md-grid-tile>
-      <img src="img/motos/yamaha-r1m.png" ng-class="{'selected': entradas.encuentaConsumo.moto.modelo == 'yamaha-r1m'}" ng-click="entradas.encuentaConsumo.moto.modelo = 'yamaha-r1m'" class="icon-radio big">
+      <md-grid-tile ng-repeat="moto in motos">
+        <img ng-src="img/motos/{{moto.id}}.png" ng-class="{'selected':entradas.encuentaConsumo.moto.modelo == moto.id}" ng-click="entradas.encuentaConsumo.moto.modelo = moto.id" class="icon-radio big">
       </md-grid-tile>
     </md-grid-list>
   </md-card>
@@ -199,6 +178,12 @@
       <label>Me quedan</label>
       <variacion valor-actual="actual.flujoAnual" valor-reforma="reforma.flujoAnual" ingreso="true" layout="row"></variacion>
     </div>
+  </md-card>
+  <md-card layout="column">
+    <iframe width="360" height="203" src="https://www.youtube.com/embed/2ghD8gTH57Y" frameborder="0" allowfullscreen=""></iframe>
+    <h3>Actívate contra la reforma:</h3>
+    <a href="http://elchapin.co/wp-content/uploads/2016/12/elactivista.png"><img width="360" src="http://elchapin.co/wp-content/uploads/2016/12/elactivista.png"></a>
+    <md-button ng-href="http://elactivista.elchapin.co/causas/NoALaTributaria/" du-smooth-scroll type="button" class="md-raised md-warn md-padding">Extresa tu descontento en redes</md-button>
   </md-card>
 </div>
 <div layout-padding>
